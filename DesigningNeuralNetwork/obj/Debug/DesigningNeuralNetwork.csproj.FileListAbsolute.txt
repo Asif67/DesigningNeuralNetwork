@@ -1,0 +1,6 @@
+F:\Projects\Incompleted Rough Projects\Personal\Console App Development\C#\Nerual Network\DesigningNeuralNetwork\DesigningNeuralNetwork\bin\Debug\DesigningNeuralNetwork.exe.config
+F:\Projects\Incompleted Rough Projects\Personal\Console App Development\C#\Nerual Network\DesigningNeuralNetwork\DesigningNeuralNetwork\bin\Debug\DesigningNeuralNetwork.exe
+F:\Projects\Incompleted Rough Projects\Personal\Console App Development\C#\Nerual Network\DesigningNeuralNetwork\DesigningNeuralNetwork\bin\Debug\DesigningNeuralNetwork.pdb
+F:\Projects\Incompleted Rough Projects\Personal\Console App Development\C#\Nerual Network\DesigningNeuralNetwork\DesigningNeuralNetwork\obj\Debug\DesigningNeuralNetwork.csprojAssemblyReference.cache
+F:\Projects\Incompleted Rough Projects\Personal\Console App Development\C#\Nerual Network\DesigningNeuralNetwork\DesigningNeuralNetwork\obj\Debug\DesigningNeuralNetwork.exe
+F:\Projects\Incompleted Rough Projects\Personal\Console App Development\C#\Nerual Network\DesigningNeuralNetwork\DesigningNeuralNetwork\obj\Debug\DesigningNeuralNetwork.pdb
