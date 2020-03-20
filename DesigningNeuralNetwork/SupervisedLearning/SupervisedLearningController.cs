@@ -34,19 +34,25 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         public void SingleInputSingleHiddenLayerMultipleNeuronSingleOutput()
         {
             Input X = new Input();
-            OneInput.SingleHiddenLayer.MultipleNeuron.Neuron[] N = new OneInput.SingleHiddenLayer.MultipleNeuron.Neuron[2];
-            N[0] = new OneInput.SingleHiddenLayer.MultipleNeuron.Neuron();
-            N[1] = new OneInput.SingleHiddenLayer.MultipleNeuron.Neuron();
+            int numberOfHiddenNeurons;
+            Console.WriteLine("Enter Number of Hidden Neurons");
+            numberOfHiddenNeurons = Convert.ToInt32(Console.ReadLine());
+            OneInput.SingleHiddenLayer.MultipleNeuron.Neuron[] N = new OneInput.SingleHiddenLayer.MultipleNeuron.Neuron[numberOfHiddenNeurons];
+            
+            for (int l = 0; l < numberOfHiddenNeurons; l++)
+            {
+                N[l] = new OneInput.SingleHiddenLayer.MultipleNeuron.Neuron();
+            }
+            
             OneInput.SingleHiddenLayer.MultipleNeuron.OneOutput.Output O = new OneInput.SingleHiddenLayer.MultipleNeuron.OneOutput.Output();
             //Initialization
             X.value = 1.0;
-
-            N[0].weight_inputToHidden = 0.1;
-            N[0].weight_hiddenToOutput = 0.1;
+            for (int l = 0; l < numberOfHiddenNeurons; l++)
+            {
+                N[l].weight_inputToHidden = 0.1;
+                N[l].weight_hiddenToOutput = 0.1;
+            }
             
-            N[1].weight_inputToHidden = 0.1;
-            N[1].weight_hiddenToOutput = 0.1;
-
             double total_weight_inputToHidden=0;
             double total_weight_hiddenToOutput=0;
             
@@ -56,15 +62,19 @@ namespace DesigningNeuralNetwork.SupervisedLearning
              * j = number of hidden neurons
              * k = total weight calculate(imp)(do not modify)
              */
-            for (int i = 0; i < 10; i++)
+            int numberOfEpoch;
+            Console.WriteLine("Enter Number of Epoch");
+            numberOfEpoch = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < numberOfEpoch; i++)
             {
                 Console.WriteLine("Epoch ["+ i +"]:\n");
-                for (int k = 0; k < 2; k++)
+                for (int k = 0; k < numberOfHiddenNeurons; k++)
                 {
                     total_weight_inputToHidden += N[k].weight_inputToHidden;
                     total_weight_hiddenToOutput += N[k].weight_hiddenToOutput;
                 }
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j < numberOfHiddenNeurons; j++)
                 {
                     N[j].Calculate(X.value);
                     O.Predict(N[j].value, N[j].weight_hiddenToOutput);
