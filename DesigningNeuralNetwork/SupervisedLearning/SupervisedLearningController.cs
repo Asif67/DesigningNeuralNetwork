@@ -33,6 +33,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         }
         public void SingleInputSingleHiddenLayerMultipleNeuronSingleOutput()
         {
+            double totalOutput = 0;
             Input X = new Input();
             int numberOfHiddenNeurons;
             Console.WriteLine("Enter Number of Hidden Neurons");
@@ -78,12 +79,12 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 {
                     N[j].Calculate(X.value);
                     O.Predict(N[j].value, N[j].weight_hiddenToOutput);
-                    O.ErrorCalculation();
-                    
+                    totalOutput += O.guess;
+                    O.ErrorCalculation(totalOutput);
                     Console.WriteLine("Neuron [" + j + "]:");
-                    Console.WriteLine("Error[" + i + "]= " + O.error + " Output[" + i + "]= " + O.guess);
+                    Console.WriteLine("Error[" + i + "]= " + O.error + " Output[" + i + "]= " + O.guess + " Target = " + O.target);
                     Console.WriteLine("IH[" + j + "] = " + N[j].weight_inputToHidden + " HO[" + j + "] = " + N[j].weight_hiddenToOutput);
-                    Console.WriteLine("Target = " + O.target + " Total IH = " + total_weight_inputToHidden + " Total OH = " + total_weight_hiddenToOutput + "\n");
+                    Console.WriteLine("Total Output = " + totalOutput + " Total IH = " + total_weight_inputToHidden + " Total OH = " + total_weight_hiddenToOutput + "\n");
                     
                     N[j].Weight_Update(O.error, total_weight_inputToHidden, total_weight_hiddenToOutput);
                 }

@@ -15,9 +15,9 @@ namespace DesigningNeuralNetwork.SupervisedLearning.OneInput.SingleHiddenLayer.M
         {
             guess = neuronValue * weight_hiddenToOutput;
         }
-        public void ErrorCalculation()
+        public void ErrorCalculation(double totalGuess)
         {
-            error = target - guess;
+            error = target - totalGuess;
         }
     }
 }
