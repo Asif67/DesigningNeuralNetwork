@@ -45,8 +45,10 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SupervisedLearning\OneInput\SingleHiddenLayer\MultipleNeuron\MultipleOutput\Output.cs" />
     <Compile Include="SupervisedLearning\OneInput\SingleHiddenLayer\MultipleNeuron\Neuron.cs" />
     <Compile Include="SupervisedLearning\OneInput\SingleHiddenLayer\MultipleNeuron\OneOutput\Output.cs" />
+    <Compile Include="SupervisedLearning\OneInput\SingleHiddenLayer\SingleNeuron\MultipleOutput\Output.cs" />
     <Compile Include="SupervisedLearning\SupervisedLearningController.cs" />
     <Compile Include="SupervisedLearning\OneInput\Input.cs" />
     <Compile Include="SupervisedLearning\OneInput\SingleHiddenLayer\SingleNeuron\Neuron.cs" />
@@ -68,8 +70,6 @@
     <Folder Include="SupervisedLearning\OneInput\MultipleHiddenLayer\MultipleNeuron\OneOutput\" />
     <Folder Include="SupervisedLearning\OneInput\MultipleHiddenLayer\SingleNeuron\MultipleOutput\" />
     <Folder Include="SupervisedLearning\OneInput\MultipleHiddenLayer\SingleNeuron\OneOutput\" />
-    <Folder Include="SupervisedLearning\OneInput\SingleHiddenLayer\MultipleNeuron\MultipleOutput\" />
-    <Folder Include="SupervisedLearning\OneInput\SingleHiddenLayer\SingleNeuron\MultipleOutput\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

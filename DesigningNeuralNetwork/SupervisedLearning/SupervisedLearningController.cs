@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DesigningNeuralNetwork.SupervisedLearning.OneInput;
 
 
+
 namespace DesigningNeuralNetwork.SupervisedLearning
 {
     class SupervisedLearningController
@@ -28,6 +29,51 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 O.ErrorCalculation();
                 Console.WriteLine("Error[" + i + "]= " + O.error + " IH= " + N.weight_inputToHidden + " HO = " + N.weight_hiddenToOutput + " Target = " + O.target);
                 N.Weight_Update(O.error);
+            }
+            Console.ReadKey();
+        }
+        public void SingleInputSingleHiddenLayerSingleNeuronMultipleOutput()
+        {
+            
+            Input X = new Input();
+            int numberOfOutputs;
+            Console.WriteLine("Enter Number of Outputs(Max 1000):");
+            numberOfOutputs = Convert.ToInt32(Console.ReadLine());
+            OneInput.SingleHiddenLayer.SingleNeuron.Neuron N = new OneInput.SingleHiddenLayer.SingleNeuron.Neuron();
+            OneInput.SingleHiddenLayer.SingleNeuron.MultipleOutput.Output[] O = new OneInput.SingleHiddenLayer.SingleNeuron.MultipleOutput.Output[numberOfOutputs];
+
+            for (int l = 0; l < numberOfOutputs; l++)
+            {
+                O[l] = new OneInput.SingleHiddenLayer.SingleNeuron.MultipleOutput.Output();
+            }
+            //Initialization
+            X.value = 1.0;
+            N.weight_inputToHidden = 0.1;
+            for (int l = 0; l < numberOfOutputs; l++)
+            {
+                N.weight_hiddenToOutputNo[l] = 0.1;//1000 Max; problem in dynamic array declare;
+                O[l].target = 1.0;
+            }
+            //Initialization
+            int numberOfEpoch;
+            Console.WriteLine("Enter Number of Epoch");
+            numberOfEpoch = Convert.ToInt32(Console.ReadLine());
+            double total_weight_hiddenToOutput = 0;
+            for (int i = 0; i < numberOfEpoch; i++)
+            {
+                N.Calculate(X.value);
+                for (int k = 0; k < numberOfOutputs; k++)
+                {
+                    total_weight_hiddenToOutput += N.weight_hiddenToOutputNo[k];
+                }
+                for (int l = 0; l < numberOfOutputs; l++)
+                {
+                    O[l].Predict(N.value, N.weight_hiddenToOutputNo[l]);
+                    O[l].ErrorCalculation();
+                    Console.WriteLine("\nError[Epoch(" + i + "), Output(" + l + ")]= " + O[l].error +  " Output[Epoch(" + i +"), Output("+ l + ")]= " + O[l].guess + " Target = " + O[l].target);
+                    Console.WriteLine("Input To Hidden Neuron Weight= " + N.weight_inputToHidden + " Hidden Neuron To Outputs Weights = " + N.weight_hiddenToOutputNo[l]);
+                    N.Weight_Update_MultipleOutput(O[l].error,numberOfOutputs, total_weight_hiddenToOutput);
+                }
             }
             Console.ReadKey();
         }
