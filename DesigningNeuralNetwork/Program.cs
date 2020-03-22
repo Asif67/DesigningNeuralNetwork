@@ -11,11 +11,16 @@ namespace DesigningNeuralNetwork
     {
         static void Main(string[] args)
         {
-            SupervisedLearningController S = new SupervisedLearningController();
+            //SupervisedLearningController S = new SupervisedLearningController();
             //S.SingleInputSingleHiddenLayerSingleNeuronSingleOutput();
             //S.SingleInputSingleHiddenLayerMultipleNeuronSingleOutput();
             //S.SingleInputSingleHiddenLayerSingleNeuronMultipleOutput();
-            S.MultipleInputMultipleHiddenLayerMultipleNeuronMultipleOutput();
+            //S.MultipleInputMultipleHiddenLayerMultipleNeuronMultipleOutput();
+            test t = new test();
+            t.Initialize();
+            t.HiddenLayer1();
+            t.HiddenLayer2();
+            t.Output();
         }
         
     }

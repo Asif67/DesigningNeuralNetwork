@@ -56,6 +56,7 @@
     <Compile Include="SupervisedLearning\OneInput\Input.cs" />
     <Compile Include="SupervisedLearning\OneInput\SingleHiddenLayer\SingleNeuron\Neuron.cs" />
     <Compile Include="SupervisedLearning\OneInput\SingleHiddenLayer\SingleNeuron\OneOutput\Output.cs" />
+    <Compile Include="SupervisedLearning\test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

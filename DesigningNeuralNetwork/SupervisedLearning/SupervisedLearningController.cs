@@ -140,34 +140,228 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         }
         public void MultipleInputMultipleHiddenLayerMultipleNeuronMultipleOutput()
         {
-            MultipleInput.Input X = new MultipleInput.Input();
-            MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
-            MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N1 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
-            MultipleInput.MultipleHiddenLayer.MultipleNeuron.MultipleOutput.Output O = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.MultipleOutput.Output();
-            double previousActivationValue;
-            double cost;
+            //MultipleInput.Input X1 = new MultipleInput.Input();
+            //MultipleInput.Input X2 = new MultipleInput.Input();
+            //MultipleInput.Input X3 = new MultipleInput.Input();
+            //MultipleInput.Input X4 = new MultipleInput.Input();
+            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N1HL1 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
+            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N2HL1 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
+            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N3HL1 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
+            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N1HL2 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
+            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N2HL2 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
+            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N3HL2 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
+            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.MultipleOutput.Output O1 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.MultipleOutput.Output();
+            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.MultipleOutput.Output O2 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.MultipleOutput.Output();
+            
+            //double previousActivationValue;
+            //double cost;
 
-            X.input = 0.1;
-            N.enteringCostWeight = 0.01;
-            N.bias = 0.5;
-            N1.enteringCostWeight = 0.02;
-            N1.bias = 0.4;
-            O.enteringCostWeight = 0.03;
-            O.bias = 0.3;
-            O.desiredOutput = 0.1;
+            //X1.input = 0.1;
+            //X2.input = 0.1;
+            //X3.input = 0.1;
+            //X4.input = 0.1;
 
-            previousActivationValue = X.input;
-            N.ActivationvalueCalculation(previousActivationValue);
-            Console.WriteLine(N.activationValue);
-            N1.ActivationvalueCalculation(N.activationValue);
-            Console.WriteLine(N1.activationValue);
-            O.ActivationvalueCalculation(N1.activationValue);
-            Console.WriteLine(O.activationValue);
-            cost = O.ErrorCalculation();
-            Console.WriteLine(cost);
-            Console.ReadKey();
+            //N1HL1.enteringCostWeight = 0.01;
+            //N1HL1.bias = 0.5;
+            
+            //N2HL1.enteringCostWeight = 0.01;
+            //N2HL1.bias = 0.5;
+            
+            //N3HL1.enteringCostWeight = 0.01;
+            //N3HL1.bias = 0.5;
+            
+            //N1HL2.enteringCostWeight = 0.02;
+            //N1HL2.bias = 0.4;
+            
+            //N2HL2.enteringCostWeight = 0.02;
+            //N2HL2.bias = 0.4;
+            
+            //N3HL2.enteringCostWeight = 0.02;
+            //N3HL2.bias = 0.4;
+            
+            //O1.enteringCostWeight = 0.03;
+            //O1.bias = 0.3;
+            //O1.desiredOutput = 0.1;
+            
+            //O2.enteringCostWeight = 0.03;
+            //O2.bias = 0.3;
+            //O2.desiredOutput = 0.1;
+
+
+
+            //void N1HL1F()
+            //{
+            //    previousActivationValue = X1.input;
+            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X1.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
+
+            //    previousActivationValue = X2.input;
+            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X2.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
+
+            //    previousActivationValue = X3.input;
+            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X3.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
+
+            //    previousActivationValue = X4.input;
+            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X4.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
+
+            //    N1HL1.SigmoidActivationFunction();
+            //    Console.WriteLine(X1.input + " * " + N1HL1.enteringCostWeight + " + " + X2.input + " * " + N1HL1.enteringCostWeight + " + " + X3.input + " * " + N1HL1.enteringCostWeight + " + " + X4.input + " * " + N1HL1.enteringCostWeight + " + " + N1HL1.bias + " = " + N1HL1.x);
+            //    Console.WriteLine("1/(1+e^-" + N1HL1.x + ") = " + N1HL1.activationValue);
+            //}
+
+            //void N2HL1F()
+            //{
+            //    previousActivationValue = X1.input;
+            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X1.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
+
+            //    previousActivationValue = X2.input;
+            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X2.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
+
+            //    previousActivationValue = X3.input;
+            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X3.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
+
+            //    previousActivationValue = X4.input;
+            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X4.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
+
+            //    N2HL1.SigmoidActivationFunction();
+            //    Console.WriteLine(X1.input + " * " + N2HL1.enteringCostWeight + " + " + X2.input + " * " + N2HL1.enteringCostWeight + " + " + X3.input + " * " + N2HL1.enteringCostWeight + " + " + X4.input + " * " + N2HL1.enteringCostWeight + " + " + N2HL1.bias + " = " + N2HL1.x);
+            //    Console.WriteLine("1/(1+e^-" + N2HL1.x + ") = " + N2HL1.activationValue);
+
+            //}
+
+            //void N3HL1F()
+            //{
+            //    previousActivationValue = X1.input;
+            //    N3HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X1.input + " * " + N3HL1.enteringCostWeight + " = " + N3HL1.weightedSum);
+
+            //    previousActivationValue = X2.input;
+            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X2.input + " * " + N3HL1.enteringCostWeight + " = " + N3HL1.weightedSum);
+
+            //    previousActivationValue = X3.input;
+            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X3.input + " * " + N3HL1.enteringCostWeight + " = " + N3HL1.weightedSum);
+
+            //    previousActivationValue = X4.input;
+            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X4.input + " * " + N3HL1.enteringCostWeight + " = " + N3HL1.weightedSum);
+
+            //    N2HL1.SigmoidActivationFunction();
+            //    Console.WriteLine(X1.input + " * " + N3HL1.enteringCostWeight + " + " + X2.input + " * " + N3HL1.enteringCostWeight + " + " + X3.input + " * " + N3HL1.enteringCostWeight + " + " + X4.input + " * " + N3HL1.enteringCostWeight + " + " + N3HL1.bias + " = " + N3HL1.x);
+            //    Console.WriteLine("1/(1+e^-" + N3HL1.x + ") = " + N3HL1.activationValue);
+
+            //}
+
+            //void N1HL2F()
+            //{
+            //    previousActivationValue = X1.input;
+            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X1.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
+
+            //    previousActivationValue = X2.input;
+            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X2.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
+
+            //    previousActivationValue = X3.input;
+            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X3.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
+
+            //    previousActivationValue = X4.input;
+            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X4.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
+
+            //    N1HL1.SigmoidActivationFunction();
+            //    Console.WriteLine(X1.input + " * " + N1HL1.enteringCostWeight + " + " + X2.input + " * " + N1HL1.enteringCostWeight + " + " + X3.input + " * " + N1HL1.enteringCostWeight + " + " + X4.input + " * " + N1HL1.enteringCostWeight + " + " + N1HL1.bias + " = " + N1HL1.x);
+            //    Console.WriteLine("1/(1+e^-" + N1HL1.x + ") = " + N1HL1.activationValue);
+            //}
+
+            //void N2HL2F()
+            //{
+            //    previousActivationValue = X1.input;
+            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X1.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
+
+            //    previousActivationValue = X2.input;
+            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X2.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
+
+            //    previousActivationValue = X3.input;
+            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X3.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
+
+            //    previousActivationValue = X4.input;
+            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(X4.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
+
+            //    N2HL1.SigmoidActivationFunction();
+            //    Console.WriteLine(X1.input + " * " + N2HL1.enteringCostWeight + " + " + X2.input + " * " + N2HL1.enteringCostWeight + " + " + X3.input + " * " + N2HL1.enteringCostWeight + " + " + X4.input + " * " + N2HL1.enteringCostWeight + " + " + N2HL1.bias + " = " + N2HL1.x);
+            //    Console.WriteLine("1/(1+e^-" + N2HL1.x + ") = " + N2HL1.activationValue);
+
+            //}
+
+            //void N3HL2F()
+            //{
+            //    previousActivationValue = N1HL1.activationValue;
+            //    N3HL2.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(N1HL1.activationValue + " * " + N3HL2.enteringCostWeight + " = " + N3HL2.weightedSum);
+
+            //    previousActivationValue = N2HL1.activationValue;
+            //    N3HL2.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(N2HL1.activationValue + " * " + N3HL2.enteringCostWeight + " = " + N3HL2.weightedSum);
+
+            //    previousActivationValue = N3HL1.activationValue;
+            //    N3HL2.ActivationvalueCalculation(previousActivationValue);
+            //    Console.WriteLine(N3HL1.activationValue + " * " + N3HL2.enteringCostWeight + " = " + N3HL2.weightedSum);
+
+            //    N3HL2.SigmoidActivationFunction();
+            //    Console.WriteLine(N3HL1.activationValue + " * " + N3HL2.enteringCostWeight + " + " + N3HL1.activationValue + " * " + N3HL2.enteringCostWeight + " + " + N3HL1.activationValue + " * " + N3HL2.enteringCostWeight + " + " + N3HL2.bias + " = " + N3HL2.x);
+            //    Console.WriteLine("1/(1+e^-" + N3HL2.x + ") = " + N3HL2.activationValue);
+
+            //}
+
+            //Console.WriteLine("Input to Hidden Layer 1");
+            //void HiddenLayer1()
+            //{
+            //    Console.WriteLine("a(1,1-3) to a(1,1):");
+            //    N1HL1F();
+            //    Console.WriteLine("\na(1,1-3) to a(1,2):");
+            //    N2HL1F();
+            //    Console.WriteLine("\na(1,1-3) to a(1,3):");
+            //    N3HL1F();
+            //}
+            
+            //Console.WriteLine("\nHidden Layer 1 to Hidden Layer 2");
+            //void HiddenLayer2()
+            //{
+            //    Console.WriteLine("a(1,1-2) to a(2,1):");
+            //    N1HL2F();
+            //    Console.WriteLine("\na(1,1-2) to a(2,2):");
+            //    N2HL2F();
+            //    Console.WriteLine("\na(1,1-2) to a(2,3):");
+            //    N3HL2F();
+            //}
+            
+            
+            ////N.ActivationvalueCalculation(previousActivationValue);
+            ////Console.WriteLine(N.activationValue);
+            ////N.ActivationvalueCalculation(previousActivationValue);
+            ////Console.WriteLine(N.activationValue);
+            ////N1.ActivationvalueCalculation(N.activationValue);
+            ////Console.WriteLine(N1.activationValue);
+            ////O.ActivationvalueCalculation(N1.activationValue);
+            ////Console.WriteLine(O.activationValue);
+            //Console.ReadKey();
 
 
         }
+        
     }
 }

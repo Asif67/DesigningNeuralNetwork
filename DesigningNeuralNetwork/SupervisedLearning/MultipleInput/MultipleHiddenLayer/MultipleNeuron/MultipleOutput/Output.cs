@@ -12,19 +12,28 @@ namespace DesigningNeuralNetwork.SupervisedLearning.MultipleInput.MultipleHidden
         public double activationValue;
         public double bias;
         public double desiredOutput;
+        double z;
         public void ActivationvalueCalculation(double previousActivationValue)
         {
-            activationValue = SigmoidActivationFunction((enteringCostWeight * previousActivationValue) + bias);
+            z = (enteringCostWeight * previousActivationValue) + bias;
+            activationValue = SigmoidActivationFunction(z);
         }
-        public double SigmoidActivationFunction(double x)
+        double SigmoidActivationFunction(double x)
         {
             double sig = 1 / (1 + Math.Pow(Math.E, -x));
             return sig;
         }
-        public double ErrorCalculation()
+        double SigmoidTransferDerivative(double x)
+        {
+            double output;
+            output = x * (1 - x);
+            return output;
+        }
+        public double ErrorCalculation(double previousActivationValue)
         {
             double cost;
-            cost = Math.Pow((activationValue - desiredOutput),2);
+            //cost = Math.Pow((activationValue - desiredOutput),2);
+            cost = previousActivationValue * SigmoidTransferDerivative(z) * 2 * (activationValue - desiredOutput);
             return (cost);
 
         }
