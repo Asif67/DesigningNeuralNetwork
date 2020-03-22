@@ -45,6 +45,9 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SupervisedLearning\MultipleInput\Input.cs" />
+    <Compile Include="SupervisedLearning\MultipleInput\MultipleHiddenLayer\MultipleNeuron\MultipleOutput\Output.cs" />
+    <Compile Include="SupervisedLearning\MultipleInput\MultipleHiddenLayer\MultipleNeuron\Neuron.cs" />
     <Compile Include="SupervisedLearning\OneInput\SingleHiddenLayer\MultipleNeuron\MultipleOutput\Output.cs" />
     <Compile Include="SupervisedLearning\OneInput\SingleHiddenLayer\MultipleNeuron\Neuron.cs" />
     <Compile Include="SupervisedLearning\OneInput\SingleHiddenLayer\MultipleNeuron\OneOutput\Output.cs" />
@@ -58,7 +61,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="SupervisedLearning\MultipleInput\MultipleHiddenLayer\MultipleNeuron\MultipleOutput\" />
     <Folder Include="SupervisedLearning\MultipleInput\MultipleHiddenLayer\MultipleNeuron\OneOutput\" />
     <Folder Include="SupervisedLearning\MultipleInput\MultipleHiddenLayer\SingleNeuron\MultipleOutput\" />
     <Folder Include="SupervisedLearning\MultipleInput\MultipleHiddenLayer\SingleNeuron\OneOutput\" />

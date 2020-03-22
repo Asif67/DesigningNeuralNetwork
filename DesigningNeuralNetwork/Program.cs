@@ -14,7 +14,8 @@ namespace DesigningNeuralNetwork
             SupervisedLearningController S = new SupervisedLearningController();
             //S.SingleInputSingleHiddenLayerSingleNeuronSingleOutput();
             //S.SingleInputSingleHiddenLayerMultipleNeuronSingleOutput();
-            S.SingleInputSingleHiddenLayerSingleNeuronMultipleOutput();
+            //S.SingleInputSingleHiddenLayerSingleNeuronMultipleOutput();
+            S.MultipleInputMultipleHiddenLayerMultipleNeuronMultipleOutput();
         }
         
     }

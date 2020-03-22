@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DesigningNeuralNetwork.SupervisedLearning.OneInput;
+using DesigningNeuralNetwork.SupervisedLearning.MultipleInput;
 
 
 
@@ -13,7 +14,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
     {
         public void SingleInputSingleHiddenLayerSingleNeuronSingleOutput()
         {
-            Input X = new Input();
+            DesigningNeuralNetwork.SupervisedLearning.OneInput.Input X = new DesigningNeuralNetwork.SupervisedLearning.OneInput.Input();
             OneInput.SingleHiddenLayer.SingleNeuron.Neuron N = new OneInput.SingleHiddenLayer.SingleNeuron.Neuron();
             OneInput.SingleHiddenLayer.SingleNeuron.OneOutput.Output O = new OneInput.SingleHiddenLayer.SingleNeuron.OneOutput.Output();
             //Initialization
@@ -34,8 +35,8 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         }
         public void SingleInputSingleHiddenLayerSingleNeuronMultipleOutput()
         {
-            
-            Input X = new Input();
+
+            DesigningNeuralNetwork.SupervisedLearning.OneInput.Input X = new DesigningNeuralNetwork.SupervisedLearning.OneInput.Input();
             int numberOfOutputs;
             Console.WriteLine("Enter Number of Outputs(Max 1000):");
             numberOfOutputs = Convert.ToInt32(Console.ReadLine());
@@ -80,7 +81,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         public void SingleInputSingleHiddenLayerMultipleNeuronSingleOutput()
         {
             double totalOutput = 0;
-            Input X = new Input();
+            DesigningNeuralNetwork.SupervisedLearning.OneInput.Input X = new DesigningNeuralNetwork.SupervisedLearning.OneInput.Input();
             int numberOfHiddenNeurons;
             Console.WriteLine("Enter Number of Hidden Neurons");
             numberOfHiddenNeurons = Convert.ToInt32(Console.ReadLine());
@@ -136,6 +137,37 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 }
             }
             Console.ReadKey();
+        }
+        public void MultipleInputMultipleHiddenLayerMultipleNeuronMultipleOutput()
+        {
+            MultipleInput.Input X = new MultipleInput.Input();
+            MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
+            MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N1 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
+            MultipleInput.MultipleHiddenLayer.MultipleNeuron.MultipleOutput.Output O = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.MultipleOutput.Output();
+            double previousActivationValue;
+            double cost;
+
+            X.input = 0.1;
+            N.enteringCostWeight = 0.01;
+            N.bias = 0.5;
+            N1.enteringCostWeight = 0.02;
+            N1.bias = 0.4;
+            O.enteringCostWeight = 0.03;
+            O.bias = 0.3;
+            O.desiredOutput = 0.1;
+
+            previousActivationValue = X.input;
+            N.ActivationvalueCalculation(previousActivationValue);
+            Console.WriteLine(N.activationValue);
+            N1.ActivationvalueCalculation(N.activationValue);
+            Console.WriteLine(N1.activationValue);
+            O.ActivationvalueCalculation(N1.activationValue);
+            Console.WriteLine(O.activationValue);
+            cost = O.ErrorCalculation();
+            Console.WriteLine(cost);
+            Console.ReadKey();
+
+
         }
     }
 }
