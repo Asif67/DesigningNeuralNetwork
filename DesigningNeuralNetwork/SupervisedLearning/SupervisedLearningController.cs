@@ -5,13 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using DesigningNeuralNetwork.SupervisedLearning.OneInput;
 using DesigningNeuralNetwork.SupervisedLearning.MultipleInput;
-
-
+using System.Windows.Media;
 
 namespace DesigningNeuralNetwork.SupervisedLearning
 {
     class SupervisedLearningController
     {
+        double[,] inputToHiddenLayer1WeightMatrix = new double[3, 4];//3 rows 4 coloums
+        double[,] hiddenLayer1ToHiddenLayer2WeightMatrix = new double[3, 3];//3 rows 3 coloums
+        double[,] hiddenLayer2ToOutputWeightMatrix = new double[3, 2];//3 rows 2 coloums
+
+        double[,] inputActivation = new double[4, 1];//4 rows 1 coloums
+        double[,] hiddenLayer1Activation = new double[3, 1];//3 rows 1 coloums
+        double[,] hiddenLayer2Activation = new double[3, 1];//3 rows 1 coloums
+        double[,] outputActivation = new double[2, 1];//2 rows 1 coloums
+
+        double[,] hiddenLayer1Bias = new double[3, 1];//3 rows 1 coloums
+        double[,] hiddenLayer2Bias = new double[3, 1];//3 rows 1 coloums
+        double[,] outputBias = new double[2, 1];//2 rows 1 coloums
         public void SingleInputSingleHiddenLayerSingleNeuronSingleOutput()
         {
             DesigningNeuralNetwork.SupervisedLearning.OneInput.Input X = new DesigningNeuralNetwork.SupervisedLearning.OneInput.Input();
@@ -140,228 +151,245 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         }
         public void MultipleInputMultipleHiddenLayerMultipleNeuronMultipleOutput()
         {
-            //MultipleInput.Input X1 = new MultipleInput.Input();
-            //MultipleInput.Input X2 = new MultipleInput.Input();
-            //MultipleInput.Input X3 = new MultipleInput.Input();
-            //MultipleInput.Input X4 = new MultipleInput.Input();
-            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N1HL1 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
-            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N2HL1 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
-            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N3HL1 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
-            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N1HL2 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
-            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N2HL2 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
-            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron N3HL2 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.Neuron();
-            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.MultipleOutput.Output O1 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.MultipleOutput.Output();
-            //MultipleInput.MultipleHiddenLayer.MultipleNeuron.MultipleOutput.Output O2 = new MultipleInput.MultipleHiddenLayer.MultipleNeuron.MultipleOutput.Output();
-            
-            //double previousActivationValue;
-            //double cost;
-
-            //X1.input = 0.1;
-            //X2.input = 0.1;
-            //X3.input = 0.1;
-            //X4.input = 0.1;
-
-            //N1HL1.enteringCostWeight = 0.01;
-            //N1HL1.bias = 0.5;
-            
-            //N2HL1.enteringCostWeight = 0.01;
-            //N2HL1.bias = 0.5;
-            
-            //N3HL1.enteringCostWeight = 0.01;
-            //N3HL1.bias = 0.5;
-            
-            //N1HL2.enteringCostWeight = 0.02;
-            //N1HL2.bias = 0.4;
-            
-            //N2HL2.enteringCostWeight = 0.02;
-            //N2HL2.bias = 0.4;
-            
-            //N3HL2.enteringCostWeight = 0.02;
-            //N3HL2.bias = 0.4;
-            
-            //O1.enteringCostWeight = 0.03;
-            //O1.bias = 0.3;
-            //O1.desiredOutput = 0.1;
-            
-            //O2.enteringCostWeight = 0.03;
-            //O2.bias = 0.3;
-            //O2.desiredOutput = 0.1;
-
-
-
-            //void N1HL1F()
-            //{
-            //    previousActivationValue = X1.input;
-            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X1.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
-
-            //    previousActivationValue = X2.input;
-            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X2.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
-
-            //    previousActivationValue = X3.input;
-            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X3.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
-
-            //    previousActivationValue = X4.input;
-            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X4.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
-
-            //    N1HL1.SigmoidActivationFunction();
-            //    Console.WriteLine(X1.input + " * " + N1HL1.enteringCostWeight + " + " + X2.input + " * " + N1HL1.enteringCostWeight + " + " + X3.input + " * " + N1HL1.enteringCostWeight + " + " + X4.input + " * " + N1HL1.enteringCostWeight + " + " + N1HL1.bias + " = " + N1HL1.x);
-            //    Console.WriteLine("1/(1+e^-" + N1HL1.x + ") = " + N1HL1.activationValue);
-            //}
-
-            //void N2HL1F()
-            //{
-            //    previousActivationValue = X1.input;
-            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X1.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
-
-            //    previousActivationValue = X2.input;
-            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X2.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
-
-            //    previousActivationValue = X3.input;
-            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X3.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
-
-            //    previousActivationValue = X4.input;
-            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X4.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
-
-            //    N2HL1.SigmoidActivationFunction();
-            //    Console.WriteLine(X1.input + " * " + N2HL1.enteringCostWeight + " + " + X2.input + " * " + N2HL1.enteringCostWeight + " + " + X3.input + " * " + N2HL1.enteringCostWeight + " + " + X4.input + " * " + N2HL1.enteringCostWeight + " + " + N2HL1.bias + " = " + N2HL1.x);
-            //    Console.WriteLine("1/(1+e^-" + N2HL1.x + ") = " + N2HL1.activationValue);
-
-            //}
-
-            //void N3HL1F()
-            //{
-            //    previousActivationValue = X1.input;
-            //    N3HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X1.input + " * " + N3HL1.enteringCostWeight + " = " + N3HL1.weightedSum);
-
-            //    previousActivationValue = X2.input;
-            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X2.input + " * " + N3HL1.enteringCostWeight + " = " + N3HL1.weightedSum);
-
-            //    previousActivationValue = X3.input;
-            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X3.input + " * " + N3HL1.enteringCostWeight + " = " + N3HL1.weightedSum);
-
-            //    previousActivationValue = X4.input;
-            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X4.input + " * " + N3HL1.enteringCostWeight + " = " + N3HL1.weightedSum);
-
-            //    N2HL1.SigmoidActivationFunction();
-            //    Console.WriteLine(X1.input + " * " + N3HL1.enteringCostWeight + " + " + X2.input + " * " + N3HL1.enteringCostWeight + " + " + X3.input + " * " + N3HL1.enteringCostWeight + " + " + X4.input + " * " + N3HL1.enteringCostWeight + " + " + N3HL1.bias + " = " + N3HL1.x);
-            //    Console.WriteLine("1/(1+e^-" + N3HL1.x + ") = " + N3HL1.activationValue);
-
-            //}
-
-            //void N1HL2F()
-            //{
-            //    previousActivationValue = X1.input;
-            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X1.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
-
-            //    previousActivationValue = X2.input;
-            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X2.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
-
-            //    previousActivationValue = X3.input;
-            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X3.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
-
-            //    previousActivationValue = X4.input;
-            //    N1HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X4.input + " * " + N1HL1.enteringCostWeight + " = " + N1HL1.weightedSum);
-
-            //    N1HL1.SigmoidActivationFunction();
-            //    Console.WriteLine(X1.input + " * " + N1HL1.enteringCostWeight + " + " + X2.input + " * " + N1HL1.enteringCostWeight + " + " + X3.input + " * " + N1HL1.enteringCostWeight + " + " + X4.input + " * " + N1HL1.enteringCostWeight + " + " + N1HL1.bias + " = " + N1HL1.x);
-            //    Console.WriteLine("1/(1+e^-" + N1HL1.x + ") = " + N1HL1.activationValue);
-            //}
-
-            //void N2HL2F()
-            //{
-            //    previousActivationValue = X1.input;
-            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X1.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
-
-            //    previousActivationValue = X2.input;
-            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X2.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
-
-            //    previousActivationValue = X3.input;
-            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X3.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
-
-            //    previousActivationValue = X4.input;
-            //    N2HL1.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(X4.input + " * " + N2HL1.enteringCostWeight + " = " + N2HL1.weightedSum);
-
-            //    N2HL1.SigmoidActivationFunction();
-            //    Console.WriteLine(X1.input + " * " + N2HL1.enteringCostWeight + " + " + X2.input + " * " + N2HL1.enteringCostWeight + " + " + X3.input + " * " + N2HL1.enteringCostWeight + " + " + X4.input + " * " + N2HL1.enteringCostWeight + " + " + N2HL1.bias + " = " + N2HL1.x);
-            //    Console.WriteLine("1/(1+e^-" + N2HL1.x + ") = " + N2HL1.activationValue);
-
-            //}
-
-            //void N3HL2F()
-            //{
-            //    previousActivationValue = N1HL1.activationValue;
-            //    N3HL2.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(N1HL1.activationValue + " * " + N3HL2.enteringCostWeight + " = " + N3HL2.weightedSum);
-
-            //    previousActivationValue = N2HL1.activationValue;
-            //    N3HL2.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(N2HL1.activationValue + " * " + N3HL2.enteringCostWeight + " = " + N3HL2.weightedSum);
-
-            //    previousActivationValue = N3HL1.activationValue;
-            //    N3HL2.ActivationvalueCalculation(previousActivationValue);
-            //    Console.WriteLine(N3HL1.activationValue + " * " + N3HL2.enteringCostWeight + " = " + N3HL2.weightedSum);
-
-            //    N3HL2.SigmoidActivationFunction();
-            //    Console.WriteLine(N3HL1.activationValue + " * " + N3HL2.enteringCostWeight + " + " + N3HL1.activationValue + " * " + N3HL2.enteringCostWeight + " + " + N3HL1.activationValue + " * " + N3HL2.enteringCostWeight + " + " + N3HL2.bias + " = " + N3HL2.x);
-            //    Console.WriteLine("1/(1+e^-" + N3HL2.x + ") = " + N3HL2.activationValue);
-
-            //}
-
-            //Console.WriteLine("Input to Hidden Layer 1");
-            //void HiddenLayer1()
-            //{
-            //    Console.WriteLine("a(1,1-3) to a(1,1):");
-            //    N1HL1F();
-            //    Console.WriteLine("\na(1,1-3) to a(1,2):");
-            //    N2HL1F();
-            //    Console.WriteLine("\na(1,1-3) to a(1,3):");
-            //    N3HL1F();
-            //}
-            
-            //Console.WriteLine("\nHidden Layer 1 to Hidden Layer 2");
-            //void HiddenLayer2()
-            //{
-            //    Console.WriteLine("a(1,1-2) to a(2,1):");
-            //    N1HL2F();
-            //    Console.WriteLine("\na(1,1-2) to a(2,2):");
-            //    N2HL2F();
-            //    Console.WriteLine("\na(1,1-2) to a(2,3):");
-            //    N3HL2F();
-            //}
-            
-            
-            ////N.ActivationvalueCalculation(previousActivationValue);
-            ////Console.WriteLine(N.activationValue);
-            ////N.ActivationvalueCalculation(previousActivationValue);
-            ////Console.WriteLine(N.activationValue);
-            ////N1.ActivationvalueCalculation(N.activationValue);
-            ////Console.WriteLine(N1.activationValue);
-            ////O.ActivationvalueCalculation(N1.activationValue);
-            ////Console.WriteLine(O.activationValue);
-            //Console.ReadKey();
-
+            WeightMatrixInitialize();
+            ActivationInitialize();
+            BiasInitialize();
+            HiddenLayer1();
+            HiddenLayer2();
+            Output();
+                
 
         }
-        
+        void HiddenLayer1()
+        {
+            double[,] z1 = new double[3, 1];//3 rows 1 coloums
+            z1 = MM(inputToHiddenLayer1WeightMatrix, 3, 4, inputActivation, 4, 1);
+            z1 = MA(z1, 3, 1, hiddenLayer1Bias, 3, 1);
+            for (int i = 0; i < 3; i++)
+            {
+                z1[i, 0] = SigmoidActivationFunction(z1[i, 0]);
+                Console.WriteLine(z1[i, 0]);
+            }
+            Console.ReadKey();
+        }
+        void HiddenLayer2()
+        {
+            double[,] z2 = new double[3, 1];//3 rows 1 coloums
+            z2 = MM(hiddenLayer1ToHiddenLayer2WeightMatrix, 3, 3, hiddenLayer1Activation, 3, 1);
+            z2 = MA(z2, 3, 1, hiddenLayer2Bias, 3, 1);
+            for (int i = 0; i < 3; i++)
+            {
+                z2[i, 0] = SigmoidActivationFunction(z2[i, 0]);
+                Console.WriteLine(z2[i, 0]);
+            }
+            Console.ReadKey();
+        }
+        void Output()
+        {
+            double[,] z3 = new double[2, 1];//3 rows 1 coloums
+            z3 = MM(hiddenLayer2ToOutputWeightMatrix, 3, 2, outputActivation, 2, 1);
+            z3 = MA(z3, 2, 1, outputBias, 2, 1);
+            for (int i = 0; i < 2; i++)
+            {
+                z3[i, 0] = SigmoidActivationFunction(z3[i, 0]);
+                Console.WriteLine(z3[i, 0]);
+            }
+            Console.ReadKey();
+        }
+        double SigmoidActivationFunction(double x)
+        {
+            double sig = 1 / (1 + Math.Pow(Math.E, -x));
+            return sig;
+        }
+        void WeightMatrixInitialize()
+        {
+            
+            //Initialize Weight Matrix
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    Random X1 = new Random();
+                    //inputToHiddenLayer1WeightMatrix[i, j] = X1.NextDouble();
+                    inputToHiddenLayer1WeightMatrix[i, j] = 0.01;
+                    Console.WriteLine("IH1WM(" + i + "," + j + ") = " + inputToHiddenLayer1WeightMatrix[i, j]);
+                }
+                Console.WriteLine("\n");
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    Random X2 = new Random();
+                    //hiddenLayer1ToHiddenLayer2WeightMatrix[i, j] = X2.NextDouble();
+                    hiddenLayer1ToHiddenLayer2WeightMatrix[i, j] = 0.02;
+                    Console.WriteLine("H1H2WM(" + i + "," + j + ") = " + hiddenLayer1ToHiddenLayer2WeightMatrix[i, j]);
+                }
+                Console.WriteLine("\n");
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    Random X3 = new Random();
+                    //hiddenLayer2ToOutputWeightMatrix[i, j] = X3.NextDouble();
+                    hiddenLayer2ToOutputWeightMatrix[i, j] = 0.03;
+                    Console.WriteLine("H2OWM(" + i + "," + j + ") = " + hiddenLayer2ToOutputWeightMatrix[i, j]);
+                }
+                Console.WriteLine("\n");
+            }
+            //Initialize Weight Matrix
+        }
+        void ActivationInitialize()
+        {
+            
+            //Initialize Activation Matrix
+            for (int i = 0; i < 4; i++)
+            {
+                Random X1 = new Random();
+                //inputActivation[0, i] = X1.NextDouble();
+                inputActivation[i, 0] = 0.1;
+                Console.WriteLine("IA(" + 0 + "," + i + ") = " + inputActivation[i, 0]);
+            }
+            Console.WriteLine("\n");
+            for (int i = 0; i < 3; i++)
+            {
+                Random X2 = new Random();
+                //hiddenLayer1Activation[0, i] = X2.NextDouble();
+                hiddenLayer1Activation[i, 0] = 0.2;
+                Console.WriteLine("H1A(" + 0 + "," + i + ") = " + hiddenLayer1Activation[i, 0]);
+            }
+            Console.WriteLine("\n");
+            for (int i = 0; i < 3; i++)
+            {
+                Random X3 = new Random();
+                //hiddenLayer2Activation[0, i] = X3.NextDouble();
+                hiddenLayer2Activation[i, 0] = 0.3;
+                Console.WriteLine("H2A(" + 0 + "," + i + ") = " + hiddenLayer2Activation[i, 0]);
+            }
+            Console.WriteLine("\n");
+            for (int i = 0; i < 2; i++)
+            {
+                Random X4 = new Random();
+                //outputActivation[0, i] = X4.NextDouble();
+                outputActivation[i, 0] = 0.4;
+                Console.WriteLine("OA(" + 0 + "," + i + ") = " + outputActivation[i, 0]);
+            }
+            Console.WriteLine("\n");
+            //Initialize Activation Matrix
+        }
+        void BiasInitialize()
+        {
+            
+            //Initialize bias Matrix
+            for (int i = 0; i < 3; i++)
+            {
+                Random X1 = new Random();
+                //hiddenLayer1Bias[i, 0] = X1.NextDouble();
+                hiddenLayer1Bias[i, 0] = 0.001;
+                Console.WriteLine("H1B(" + 0 + "," + i + ") = " + hiddenLayer1Bias[i,0]);
+            }
+            Console.WriteLine("\n");
+            for (int i = 0; i < 3; i++)
+            {
+                Random X2 = new Random();
+                //hiddenLayer2Bias[i, 0] = X2.NextDouble();
+                hiddenLayer2Bias[i, 0] = 0.002;
+                Console.WriteLine("H2B(" + 0 + "," + i + ") = " + hiddenLayer2Bias[i, 0]);
+            }
+            Console.WriteLine("\n");
+            for (int i = 0; i < 2; i++)
+            {
+                Random X3 = new Random();
+                //outputBias[i, 0] = X3.NextDouble();
+                outputBias[i, 0] = 0.003;
+                Console.WriteLine("OB(" + 0 + "," + i + ") = " + outputBias[i, 0]);
+            }
+            Console.WriteLine("\n");
+            //Initialize bias Matrix
+        }
+        double[,] MM(double[,] a, int m,int n, double[,] b, int p,int q)
+        {
+                int i, j;
+                ////Console.WriteLine("Matrix a:");
+                //for (i = 0; i < m; i++)
+                //{
+                //    for (j = 0; j < n; j++)
+                //    {
+                //        //Console.Write(a[i, j] + " ");
+                //    }
+                //    //Console.WriteLine();
+                //}
+                ////Console.WriteLine("Matrix b:");
+                //for (i = 0; i < p; i++)
+                //{
+                //    for (j = 0; j < q; j++)
+                //    {
+                //        Console.Write(b[i, j] + " ");
+                //    }
+                //    Console.WriteLine();
+                //}
+                if (n != p)
+                {
+                    Console.WriteLine("Matrix multiplication not possible");
+                return (a);
+                }
+                else
+                {
+                    double[,] c = new double[m, q];
+                    for (i = 0; i < m; i++)
+                    {
+                        for (j = 0; j < q; j++)
+                        {
+                            c[i, j] = 0;
+                            for (int k = 0; k < n; k++)
+                            {
+                                c[i, j] += a[i, k] * b[k, j];
+                            }
+                        }
+                    }
+                    //Console.WriteLine("The product of the two matrices is :");
+                    //for (i = 0; i < m; i++)
+                    //{
+                    //    for (j = 0; j < q; j++)
+                    //    {
+                    //        Console.Write(c[i, j] + "\t");
+                    //    }
+                    //    Console.WriteLine();
+                    //}
+                return (c);
+                }          
+        }
+        double[,] MA(double[,] arr1, int m, int n, double[,] arr2,int p, int q)
+        {
+            int i, j;
+            double[,] arr3 = new double[m, q];
+            //Console.Write("\nFirst matrix is:\n");
+            //for (i = 0; i < m; i++)
+            //{
+            //    Console.Write("\n");
+            //    for (j = 0; j < q; j++)
+            //        Console.Write("{0}\t", arr1[i, j]);
+            //}
+            //Console.Write("\nSecond matrix is:\n");
+            //for (i = 0; i < m; i++)
+            //{
+            //    Console.Write("\n");
+            //    for (j = 0; j < q; j++)
+            //        Console.Write("{0}\t", arr2[i, j]);
+            //}
+            for (i = 0; i < m; i++)
+                for (j = 0; j < q; j++)
+                    arr3[i, j] = arr1[i, j] + arr2[i, j];
+            //Console.Write("\nAdding two matrices: \n");
+            //for (i = 0; i < m; i++)
+            //{
+            //    Console.Write("\n");
+            //    for (j = 0; j < q; j++)
+            //        Console.Write("{0}\t", arr3[i, j]);
+            //}
+            //Console.Write("\n\n");
+            return (arr3);
+        }
     }
 }
