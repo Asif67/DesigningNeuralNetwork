@@ -12,11 +12,17 @@ namespace DesigningNeuralNetwork.SupervisedLearning
     class SupervisedLearningController
     {
         //variables needed for 1 Sample, 4 Inputs, 2 Hidden Layers(3 Hidden Neurons each), 2 Outputs
-        static int numberOfInputNeurons=4;
+        //static int numberOfInputNeurons = 4;
+        //static int columnMatrixDef = 1;
+        //static int HL1NumberofNeurons = 3;
+        //static int HL2NumberofNeurons = 3;
+        //static int numberOfOutputNeurons = 2;
+
+        static int numberOfInputNeurons = 784;
         static int columnMatrixDef = 1;
-        static int HL1NumberofNeurons = 3;
-        static int HL2NumberofNeurons = 3;
-        static int numberOfOutputNeurons = 2;
+        static int HL1NumberofNeurons = 16;
+        static int HL2NumberofNeurons = 16;
+        static int numberOfOutputNeurons = 10;
 
 
         double[,] inputToHiddenLayer1WeightMatrix = new double[HL1NumberofNeurons, numberOfInputNeurons];//3 rows 4 coloums
@@ -190,6 +196,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             Console.WriteLine("\nHidden Layer 1:");
             z1 = MM(inputToHiddenLayer1WeightMatrix, HL1NumberofNeurons, numberOfInputNeurons, inputActivation, numberOfInputNeurons, columnMatrixDef);
             z1 = MA(z1, HL1NumberofNeurons, columnMatrixDef, hiddenLayer1Bias, HL1NumberofNeurons, columnMatrixDef);
+            Console.WriteLine("\nAfter SigmoidActivation Function application:");
             for (int i = 0; i < HL1NumberofNeurons; i++)
             {
                 z1[i, 0] = SigmoidActivationFunction(z1[i, 0]);
@@ -202,6 +209,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             Console.WriteLine("\nHidden Layer 2:");
             z2 = MM(hiddenLayer1ToHiddenLayer2WeightMatrix, HL2NumberofNeurons, HL1NumberofNeurons, hiddenLayer1Activation, HL2NumberofNeurons, columnMatrixDef);
             z2 = MA(z2, HL2NumberofNeurons, columnMatrixDef, hiddenLayer2Bias, HL2NumberofNeurons, columnMatrixDef);
+            Console.WriteLine("\nAfter SigmoidActivation Function application:");
             for (int i = 0; i < HL2NumberofNeurons; i++)
             {
                 z2[i, 0] = SigmoidActivationFunction(z2[i, 0]);
@@ -214,7 +222,8 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             Console.WriteLine("\nOutput:");
             z3 = MM(hiddenLayer2ToOutputWeightMatrix, HL2NumberofNeurons, numberOfOutputNeurons, outputActivation, numberOfOutputNeurons, columnMatrixDef);
             z3 = MA(z3, numberOfOutputNeurons, columnMatrixDef, outputBias, numberOfOutputNeurons, columnMatrixDef);
-            for (int i = 0; i < 2; i++)
+            Console.WriteLine("\nAfter SigmoidActivation Function application:");
+            for (int i = 0; i < numberOfOutputNeurons; i++)
             {
                 z3[i, 0] = SigmoidActivationFunction(z3[i, 0]);
                 Console.WriteLine(z3[i, 0]);
@@ -382,33 +391,33 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         }
         double[,] MM(double[,] a, int m,int n, double[,] b, int p,int q)
         {
-                int i, j;
-                ////Console.WriteLine("Matrix a:");
-                //for (i = 0; i < m; i++)
-                //{
-                //    for (j = 0; j < n; j++)
-                //    {
-                //        //Console.Write(a[i, j] + " ");
-                //    }
-                //    //Console.WriteLine();
-                //}
-                ////Console.WriteLine("Matrix b:");
-                //for (i = 0; i < p; i++)
-                //{
-                //    for (j = 0; j < q; j++)
-                //    {
-                //        Console.Write(b[i, j] + " ");
-                //    }
-                //    Console.WriteLine();
-                //}
-                if (n != p)
+            int i, j;
+            Console.WriteLine("Matrix a:");
+            for (i = 0; i < m; i++)
+            {
+                for (j = 0; j < n; j++)
+                {
+                    Console.Write(a[i, j] + " ");
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("Matrix b:");
+            for (i = 0; i < p; i++)
+            {
+                for (j = 0; j < q; j++)
+                {
+                    Console.Write(b[i, j] + " ");
+                }
+                Console.WriteLine();
+            }
+            if (n != p)
                 {
                     Console.WriteLine("Matrix multiplication not possible");
                 return (a);
                 }
                 else
                 {
-                    double[,] c = new double[m, q];
+                    double[,] c = new double[m, n];
                     for (i = 0; i < m; i++)
                     {
                         for (j = 0; j < q; j++)
@@ -420,15 +429,15 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                             }
                         }
                     }
-                    //Console.WriteLine("The product of the two matrices is :");
-                    //for (i = 0; i < m; i++)
-                    //{
-                    //    for (j = 0; j < q; j++)
-                    //    {
-                    //        Console.Write(c[i, j] + "\t");
-                    //    }
-                    //    Console.WriteLine();
-                    //}
+                Console.WriteLine("The product of the two matrices is :");
+                for (i = 0; i < m; i++)
+                {
+                    for (j = 0; j < q; j++)
+                    {
+                        Console.Write(c[i, j] + "\t");
+                    }
+                    Console.WriteLine();
+                }
                 return (c);
                 }          
         }
@@ -436,31 +445,31 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         {
             int i, j;
             double[,] arr3 = new double[m, q];
-            //Console.Write("\nFirst matrix is:\n");
-            //for (i = 0; i < m; i++)
-            //{
-            //    Console.Write("\n");
-            //    for (j = 0; j < q; j++)
-            //        Console.Write("{0}\t", arr1[i, j]);
-            //}
-            //Console.Write("\nSecond matrix is:\n");
-            //for (i = 0; i < m; i++)
-            //{
-            //    Console.Write("\n");
-            //    for (j = 0; j < q; j++)
-            //        Console.Write("{0}\t", arr2[i, j]);
-            //}
+            Console.Write("\nFirst matrix is:\n");
+            for (i = 0; i < m; i++)
+            {
+                Console.Write("\n");
+                for (j = 0; j < q; j++)
+                    Console.Write("{0}\t", arr1[i, j]);
+            }
+            Console.Write("\nSecond matrix is:\n");
+            for (i = 0; i < m; i++)
+            {
+                Console.Write("\n");
+                for (j = 0; j < q; j++)
+                    Console.Write("{0}\t", arr2[i, j]);
+            }
             for (i = 0; i < m; i++)
                 for (j = 0; j < q; j++)
                     arr3[i, j] = arr1[i, j] + arr2[i, j];
-            //Console.Write("\nAdding two matrices: \n");
-            //for (i = 0; i < m; i++)
-            //{
-            //    Console.Write("\n");
-            //    for (j = 0; j < q; j++)
-            //        Console.Write("{0}\t", arr3[i, j]);
-            //}
-            //Console.Write("\n\n");
+            Console.Write("\nAdding two matrices: \n");
+            for (i = 0; i < m; i++)
+            {
+                Console.Write("\n");
+                for (j = 0; j < q; j++)
+                    Console.Write("{0}\t", arr3[i, j]);
+            }
+            Console.Write("\n\n");
             return (arr3);
         }
         double[,] MS(double[,] arr1, int m, int n, double[,] arr2, int p, int q)
