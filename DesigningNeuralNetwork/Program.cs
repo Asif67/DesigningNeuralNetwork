@@ -21,6 +21,7 @@ namespace DesigningNeuralNetwork
             //t.HiddenLayer1();
             //t.HiddenLayer2();
             //t.Output();
+            //t.MultipleInputMultipleHiddenLayerMultipleNeuronMultipleOutput();
         }
         
     }
