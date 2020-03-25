@@ -6,23 +6,24 @@ using System.Threading.Tasks;
 using DesigningNeuralNetwork.SupervisedLearning.OneInput;
 using DesigningNeuralNetwork.SupervisedLearning.MultipleInput;
 using System.Windows.Media;
+using System.IO;
 
 namespace DesigningNeuralNetwork.SupervisedLearning
 {
     class SupervisedLearningController
     {
         //variables needed for 1 Sample, 4 Inputs, 2 Hidden Layers(3 Hidden Neurons each), 2 Outputs
-        static int numberOfInputNeurons = 4;
-        static int columnMatrixDef = 1;
-        static int HL1NumberofNeurons = 3;
-        static int HL2NumberofNeurons = 3;
-        static int numberOfOutputNeurons = 2;
-
-        //static int numberOfInputNeurons = 784;
+        //static int numberOfInputNeurons = 4;
         //static int columnMatrixDef = 1;
-        //static int HL1NumberofNeurons = 16;
-        //static int HL2NumberofNeurons = 16;
-        //static int numberOfOutputNeurons = 10;
+        //static int HL1NumberofNeurons = 3;
+        //static int HL2NumberofNeurons = 3;
+        //static int numberOfOutputNeurons = 2;
+
+        static int numberOfInputNeurons = 784;
+        static int columnMatrixDef = 1;
+        static int HL1NumberofNeurons = 16;
+        static int HL2NumberofNeurons = 16;
+        static int numberOfOutputNeurons = 10;
 
         //static int numberOfInputNeurons = 1;
         //static int columnMatrixDef = 1;
@@ -49,8 +50,8 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         double[,] z3 = new double[numberOfOutputNeurons, columnMatrixDef];//2 rows 1 coloums
         public double[,] desiredOutput = new double[numberOfOutputNeurons, columnMatrixDef];//2 rows 1 coloums
         double[,] cost = new double[numberOfOutputNeurons, columnMatrixDef];//2 rows 1 coloums
-        double totalCost;
-        int numberOfTrainingSamples = 0;
+        double totalCostOverAllOutputNeurons,totalCostOverAllTrainingSamples;
+        int numberOfTrainingSamples;
         //variables needed for 1 Sample, 4 Inputs, 2 Hidden Layers(3 Hidden Neurons each), 2 Outputs
         public void SingleInputSingleHiddenLayerSingleNeuronSingleOutput()
         {
@@ -182,31 +183,52 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         {
 
             Initialize();
+            Console.Write("Enter Number of Training Samples = ");
+            numberOfTrainingSamples = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine(numberOfTrainingSamples);
+            for (int j = 0; j < numberOfTrainingSamples; j++)
+            {
+                Console.WriteLine("Sample Number = " + j);
+                //for (int i = 0; i < numberOfInputNeurons; i++)
+                //{
+                //    Console.Write("Enter Input Activation(" + i + ",0) = ");
+                //    inputActivation[i, 0] = Convert.ToDouble(Console.ReadLine());
+                //    //inputActivation[i, 0] = 0.00;
+                //}
+                //for (int i = 0; i < numberOfOutputNeurons; i++)
+                //{
+                //    Console.WriteLine("Enter Desired Output(" + i + ",0) = ");
+                //    desiredOutput[i, 0] = Convert.ToDouble(Console.ReadLine());
+                //    //desiredOutput[0, 0] = 1.00;
+                //}
+                InputIntializeFormFile(j);
+                DesiredOutputIntializeFormFile(j);
+                ActivationPrint();
+                DesiredOutputPrint();
+                HiddenLayers();
+                Output();
+                totalCostOverAllTrainingSamples += CostCalculation();
+                Console.WriteLine("Total Cost Over All(" + j + ") Training Samples = " + totalCostOverAllTrainingSamples);
+                Console.WriteLine("Average Cost Over All(" + j + ") Training Samples = " + totalCostOverAllTrainingSamples / numberOfTrainingSamples);
+            }
+            //Test Sample 1 
+            //inputActivation[0, 0] = 0.00;
+            //inputActivation[1, 0] = 1.00;
+            //inputActivation[2, 0] = 1.00;
+            //inputActivation[3, 0] = 0.00;
+            //desiredOutput[0, 0] = 1.00;
+            //desiredOutput[1, 0] = 0.00;
 
-            inputActivation[0, 0] = 0.00;
-            inputActivation[1, 0] = 1.00;
-            inputActivation[2, 0] = 1.00;
-            inputActivation[3, 0] = 0.00;
-            desiredOutput[0, 0] = 1.00;
-            desiredOutput[1, 0] = 0.00;
-            ActivationPrint();
-            DesiredOutputPrint();
-            HiddenLayers();
-            Output();
-            CostCalculation();
 
-            inputActivation[0, 0] = 1.00;
-            inputActivation[1, 0] = 0.00;
-            inputActivation[2, 0] = 0.00;
-            inputActivation[3, 0] = 1.00;
-            desiredOutput[0, 0] = 0.00;
-            desiredOutput[1, 0] = 1.00;
-            ActivationPrint();
-            DesiredOutputPrint();
-            HiddenLayers();
-            Output();
-            CostCalculation();
-            
+            //Test Sample 2
+            //inputActivation[0, 0] = 1.00;
+            //inputActivation[1, 0] = 0.00;
+            //inputActivation[2, 0] = 0.00;
+            //inputActivation[3, 0] = 1.00;
+            //desiredOutput[0, 0] = 0.00;
+            //desiredOutput[1, 0] = 1.00;
+            Console.ReadKey();
+
         }
         void Initialize()
         {
@@ -376,7 +398,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             }
             Console.ReadKey();
         }
-        void CostCalculation()
+        double CostCalculation()
         {
             //Console.WriteLine("\nCost(desiredoutput - predicted output):");
             cost = MS(z3, numberOfOutputNeurons, columnMatrixDef, desiredOutput, numberOfOutputNeurons, columnMatrixDef);
@@ -388,14 +410,13 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
                 cost[i, 0] = Math.Pow((cost[i,0]), 2);
-                totalCost += cost[i, 0];
+                totalCostOverAllOutputNeurons += cost[i, 0];
                 Console.WriteLine(cost[i, 0]);
             }
-            numberOfTrainingSamples++;
             Console.WriteLine("Total Cost of " + numberOfTrainingSamples + " Training Samples:");
-            Console.WriteLine(totalCost);
+            Console.WriteLine(totalCostOverAllOutputNeurons);
             Console.WriteLine("Average Cost of " + numberOfTrainingSamples + " Training Samples:");
-            Console.WriteLine(totalCost / numberOfTrainingSamples);
+            Console.WriteLine(totalCostOverAllOutputNeurons / numberOfInputNeurons);
             /* 
              * aL = activation value of the output neuron
              * aL-1 = activation value of the previous neuron
@@ -416,6 +437,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             //    cost[i, 0] = Math.Pow((cost[i, 0]), 2);
             //    Console.WriteLine(cost[i, 0]);
             //}
+            return (totalCostOverAllOutputNeurons);
             Console.ReadKey();
         }
         double[,] MM(double[,] a, int m,int n, double[,] b, int p,int q)
@@ -531,6 +553,38 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             //}
             //Console.Write("\n\n");
             return (arr3);
+        }
+        void InputIntializeFormFile(int sampleNumber)
+        {
+            Console.WriteLine(sampleNumber);
+            String path = "Inputs/InputTrain" + sampleNumber + ".csv";
+            //String path = "InputTrain1.csv";
+            //String path = "InputTrainOneSample.csv";
+            Console.WriteLine(path);
+            String[] lines;
+            lines = File.ReadAllLines(path);
+            for (int i = 1; i < numberOfInputNeurons; i++)
+            {
+                inputActivation[i, 0] = Convert.ToDouble(lines[i]);
+                Console.WriteLine("File Read OK:" + lines[i]);
+                Console.WriteLine("Input Assignment OK:" + inputActivation[i, 0]);
+            }
+        }
+        void DesiredOutputIntializeFormFile(int sampleNumber)
+        {
+            Console.WriteLine(sampleNumber);
+            //String path = "DesiredOutputTrainOneSample.csv";
+            String path = "DesiredOutputs/DesiredOutput" + sampleNumber + ".csv";
+            //String path = "DesiredOutput1.csv";
+            Console.WriteLine(path);
+            String[] lines;
+            lines = File.ReadAllLines(path);
+            for (int i = 0; i < numberOfOutputNeurons; i++)
+            {
+                desiredOutput[i, 0] = Convert.ToDouble(lines[i]);
+                Console.WriteLine("File Read OK:" + lines[i]);
+                Console.WriteLine("Desired Output Assignment OK:" + desiredOutput[i, 0]);
+            }
         }
     }
 }
