@@ -12,24 +12,30 @@ namespace DesigningNeuralNetwork.SupervisedLearning
     class SupervisedLearningController
     {
         //variables needed for 1 Sample, 4 Inputs, 2 Hidden Layers(3 Hidden Neurons each), 2 Outputs
-        //static int numberOfInputNeurons = 4;
-        //static int columnMatrixDef = 1;
-        //static int HL1NumberofNeurons = 3;
-        //static int HL2NumberofNeurons = 3;
-        //static int numberOfOutputNeurons = 2;
-
-        static int numberOfInputNeurons = 784;
+        static int numberOfInputNeurons = 4;
         static int columnMatrixDef = 1;
-        static int HL1NumberofNeurons = 16;
-        static int HL2NumberofNeurons = 16;
-        static int numberOfOutputNeurons = 10;
+        static int HL1NumberofNeurons = 3;
+        static int HL2NumberofNeurons = 3;
+        static int numberOfOutputNeurons = 2;
+
+        //static int numberOfInputNeurons = 784;
+        //static int columnMatrixDef = 1;
+        //static int HL1NumberofNeurons = 16;
+        //static int HL2NumberofNeurons = 16;
+        //static int numberOfOutputNeurons = 10;
+
+        //static int numberOfInputNeurons = 1;
+        //static int columnMatrixDef = 1;
+        //static int HL1NumberofNeurons = 1;
+        //static int HL2NumberofNeurons = 1;
+        //static int numberOfOutputNeurons = 1;
 
 
         double[,] inputToHiddenLayer1WeightMatrix = new double[HL1NumberofNeurons, numberOfInputNeurons];//3 rows 4 coloums
         double[,] hiddenLayer1ToHiddenLayer2WeightMatrix = new double[HL2NumberofNeurons, HL1NumberofNeurons];//3 rows 3 coloums
         double[,] hiddenLayer2ToOutputWeightMatrix = new double[HL2NumberofNeurons, numberOfOutputNeurons];//3 rows 2 coloums
 
-        double[,] inputActivation = new double[numberOfInputNeurons, columnMatrixDef];//4 rows 1 coloums
+        public double[,] inputActivation = new double[numberOfInputNeurons, columnMatrixDef];//4 rows 1 coloums
         double[,] hiddenLayer1Activation = new double[HL1NumberofNeurons, columnMatrixDef];//3 rows 1 coloums
         double[,] hiddenLayer2Activation = new double[HL2NumberofNeurons, columnMatrixDef];//3 rows 1 coloums
         double[,] outputActivation = new double[numberOfOutputNeurons, columnMatrixDef];//2 rows 1 coloums
@@ -41,9 +47,10 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         double[,] z1 = new double[HL1NumberofNeurons, columnMatrixDef];//3 rows 1 coloums
         double[,] z2 = new double[HL2NumberofNeurons, columnMatrixDef];//3 rows 1 coloums
         double[,] z3 = new double[numberOfOutputNeurons, columnMatrixDef];//2 rows 1 coloums
-        double[,] desiredOutput = new double[numberOfOutputNeurons, columnMatrixDef];//2 rows 1 coloums
+        public double[,] desiredOutput = new double[numberOfOutputNeurons, columnMatrixDef];//2 rows 1 coloums
         double[,] cost = new double[numberOfOutputNeurons, columnMatrixDef];//2 rows 1 coloums
         double totalCost;
+        int numberOfTrainingSamples = 0;
         //variables needed for 1 Sample, 4 Inputs, 2 Hidden Layers(3 Hidden Neurons each), 2 Outputs
         public void SingleInputSingleHiddenLayerSingleNeuronSingleOutput()
         {
@@ -173,17 +180,38 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         }
         public void MultipleInputMultipleHiddenLayerMultipleNeuronMultipleOutput()
         {
+
             Initialize();
+
+            inputActivation[0, 0] = 0.00;
+            inputActivation[1, 0] = 1.00;
+            inputActivation[2, 0] = 1.00;
+            inputActivation[3, 0] = 0.00;
+            desiredOutput[0, 0] = 1.00;
+            desiredOutput[1, 0] = 0.00;
+            ActivationPrint();
+            DesiredOutputPrint();
             HiddenLayers();
             Output();
             CostCalculation();
+
+            inputActivation[0, 0] = 1.00;
+            inputActivation[1, 0] = 0.00;
+            inputActivation[2, 0] = 0.00;
+            inputActivation[3, 0] = 1.00;
+            desiredOutput[0, 0] = 0.00;
+            desiredOutput[1, 0] = 1.00;
+            ActivationPrint();
+            DesiredOutputPrint();
+            HiddenLayers();
+            Output();
+            CostCalculation();
+            
         }
         void Initialize()
         {
             WeightMatrixInitialize();
-            ActivationInitialize();
             BiasInitialize();
-            DesiredOutputInitialize();
         }
         void HiddenLayers()
         {
@@ -202,6 +230,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 z1[i, 0] = SigmoidActivationFunction(z1[i, 0]);
                 Console.WriteLine(z1[i, 0]);
             }
+            hiddenLayer1Activation = z1;
             Console.ReadKey();
         }
         void HiddenLayer2()
@@ -215,6 +244,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 z2[i, 0] = SigmoidActivationFunction(z2[i, 0]);
                 Console.WriteLine(z2[i, 0]);
             }
+            hiddenLayer2Activation = z2;
             Console.ReadKey();
         }
         void Output()
@@ -228,6 +258,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 z3[i, 0] = SigmoidActivationFunction(z3[i, 0]);
                 Console.WriteLine(z3[i, 0]);
             }
+            outputActivation = z3;
             Console.ReadKey();
         }
         double SigmoidActivationFunction(double x)
@@ -237,7 +268,8 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         }
         void WeightMatrixInitialize()
         {
-            
+
+            Console.WriteLine("Input to Hidden Layer 1 Weight Matrix\n\n");
             //Initialize Weight Matrix
             for (int i = 0; i < HL1NumberofNeurons; i++)
             {
@@ -246,10 +278,12 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                     Random X1 = new Random();
                     inputToHiddenLayer1WeightMatrix[i, j] = X1.NextDouble();
                     //inputToHiddenLayer1WeightMatrix[i, j] = 0.01;
-                    Console.WriteLine("IH1WM(" + i + "," + j + ") = " + inputToHiddenLayer1WeightMatrix[i, j]);
+                    //Console.WriteLine("IH1WM(" + i + "," + j + ") = " + inputToHiddenLayer1WeightMatrix[i, j]);
+                    Console.Write("IH1WM(" + i + "," + j + ") = "+"{0}\t", inputToHiddenLayer1WeightMatrix[i, j]);
                 }
                 Console.WriteLine("\n");
             }
+            Console.WriteLine("Hidden Layer 1 to Hidden Layer 2 Weight Matrix\n\n");
             for (int i = 0; i < HL2NumberofNeurons; i++)
             {
                 for (int j = 0; j < HL1NumberofNeurons; j++)
@@ -257,10 +291,12 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                     Random X2 = new Random();
                     hiddenLayer1ToHiddenLayer2WeightMatrix[i, j] = X2.NextDouble();
                     //hiddenLayer1ToHiddenLayer2WeightMatrix[i, j] = 0.02;
-                    Console.WriteLine("H1H2WM(" + i + "," + j + ") = " + hiddenLayer1ToHiddenLayer2WeightMatrix[i, j]);
+                    //Console.WriteLine("H1H2WM(" + i + "," + j + ") = " + hiddenLayer1ToHiddenLayer2WeightMatrix[i, j]);
+                    Console.Write("H1H2WM(" + i + "," + j + ") = " + "{0}\t", hiddenLayer1ToHiddenLayer2WeightMatrix[i, j]);
                 }
                 Console.WriteLine("\n");
             }
+            Console.WriteLine("Hidden Layer 2 to Output Weight Matrix\n\n");
             for (int i = 0; i < HL2NumberofNeurons; i++)
             {
                 for (int j = 0; j < numberOfOutputNeurons; j++)
@@ -268,49 +304,38 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                     Random X3 = new Random();
                     hiddenLayer2ToOutputWeightMatrix[i, j] = X3.NextDouble();
                     //hiddenLayer2ToOutputWeightMatrix[i, j] = 0.03;
-                    Console.WriteLine("H2OWM(" + i + "," + j + ") = " + hiddenLayer2ToOutputWeightMatrix[i, j]);
+                    //Console.WriteLine("H2OWM(" + i + "," + j + ") = " + hiddenLayer2ToOutputWeightMatrix[i, j]);
+                    Console.Write("H2OWM(" + i + "," + j + ") = " + "{0}\t", hiddenLayer2ToOutputWeightMatrix[i, j]);
                 }
                 Console.WriteLine("\n");
             }
             //Initialize Weight Matrix
         }
-        void ActivationInitialize()
+        void ActivationPrint()
         {
             
-            //Initialize Activation Matrix
+            //Show Activation Matrix
             for (int i = 0; i < numberOfInputNeurons; i++)
             {
-                Random X1 = new Random();
-                inputActivation[i, 0] = X1.NextDouble();
-                //inputActivation[i, 0] = 0.1;
                 Console.WriteLine("IA(" + 0 + "," + i + ") = " + inputActivation[i,0]);
             }
             Console.WriteLine("\n");
             for (int i = 0; i < HL1NumberofNeurons; i++)
             {
-                Random X2 = new Random();
-                hiddenLayer1Activation[i, 0] = X2.NextDouble();
-                //hiddenLayer1Activation[i, 0] = 0.2;
                 Console.WriteLine("H1A(" + 0 + "," + i + ") = " + hiddenLayer1Activation[i,0]);
             }
             Console.WriteLine("\n");
             for (int i = 0; i < HL2NumberofNeurons; i++)
             {
-                Random X3 = new Random();
-                hiddenLayer2Activation[i,0] = X3.NextDouble();
-                //hiddenLayer2Activation[i, 0] = 0.3;
                 Console.WriteLine("H2A(" + 0 + "," + i + ") = " + hiddenLayer2Activation[i,0]);
             }
             Console.WriteLine("\n");
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
-                Random X4 = new Random();
-                outputActivation[i,0] = X4.NextDouble();
-                //outputActivation[i, 0] = 0.4;
                 Console.WriteLine("OA(" + 0 + "," + i + ") = " + outputActivation[i, 0]);
             }
             Console.WriteLine("\n");
-            //Initialize Activation Matrix
+            //Show Activation Matrix
         }
         void BiasInitialize()
         {
@@ -342,23 +367,23 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             Console.WriteLine("\n");
             //Initialize bias Matrix
         }
-        void DesiredOutputInitialize()
+        void DesiredOutputPrint()
         {
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
-                desiredOutput[i, 0] = 1;
+                //desiredOutput[i, 0] = 1;
                 Console.WriteLine(desiredOutput[i, 0]);
             }
             Console.ReadKey();
         }
         void CostCalculation()
         {
-            Console.WriteLine("\nCost(desiredoutput - predicted output):");
+            //Console.WriteLine("\nCost(desiredoutput - predicted output):");
             cost = MS(z3, numberOfOutputNeurons, columnMatrixDef, desiredOutput, numberOfOutputNeurons, columnMatrixDef);
-            for (int i = 0; i < numberOfOutputNeurons; i++)
-            {
-                Console.WriteLine(cost[i, 0]);
-            }
+            //for (int i = 0; i < numberOfOutputNeurons; i++)
+            //{
+            //    Console.WriteLine(cost[i, 0]);
+            //}
             Console.WriteLine("\nCost(desiredoutput - predicted output)^2:");
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
@@ -366,7 +391,11 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 totalCost += cost[i, 0];
                 Console.WriteLine(cost[i, 0]);
             }
+            numberOfTrainingSamples++;
+            Console.WriteLine("Total Cost of " + numberOfTrainingSamples + " Training Samples:");
             Console.WriteLine(totalCost);
+            Console.WriteLine("Average Cost of " + numberOfTrainingSamples + " Training Samples:");
+            Console.WriteLine(totalCost / numberOfTrainingSamples);
             /* 
              * aL = activation value of the output neuron
              * aL-1 = activation value of the previous neuron
@@ -381,35 +410,35 @@ namespace DesigningNeuralNetwork.SupervisedLearning
              * dc0/daL = 2 * (aL - desiredOutput)
              * dc0/dwL = (aL-1) * (FirstOrderDerivationOfSigmoidFunction(zL)) * (2 * (aL - desiredOutput)) //Simplified Chain rule for source code use
              */
-            Console.WriteLine("\nCost(Simplified Chain rule applied):");
-            for (int i = 0; i < numberOfOutputNeurons; i++)
-            {
-                cost[i, 0] = Math.Pow((cost[i, 0]), 2);
-                Console.WriteLine(cost[i, 0]);
-            }
+            //Console.WriteLine("\nCost(Simplified Chain rule applied):");
+            //for (int i = 0; i < numberOfOutputNeurons; i++)
+            //{
+            //    cost[i, 0] = Math.Pow((cost[i, 0]), 2);
+            //    Console.WriteLine(cost[i, 0]);
+            //}
             Console.ReadKey();
         }
         double[,] MM(double[,] a, int m,int n, double[,] b, int p,int q)
         {
             int i, j;
-            Console.WriteLine("Matrix a:");
-            for (i = 0; i < m; i++)
-            {
-                for (j = 0; j < n; j++)
-                {
-                    Console.Write(a[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
-            Console.WriteLine("Matrix b:");
-            for (i = 0; i < p; i++)
-            {
-                for (j = 0; j < q; j++)
-                {
-                    Console.Write(b[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
+            //Console.WriteLine("Matrix a:");
+            //for (i = 0; i < m; i++)
+            //{
+            //    for (j = 0; j < n; j++)
+            //    {
+            //        Console.Write(a[i, j] + " ");
+            //    }
+            //    Console.WriteLine();
+            //}
+            //Console.WriteLine("Matrix b:");
+            //for (i = 0; i < p; i++)
+            //{
+            //    for (j = 0; j < q; j++)
+            //    {
+            //        Console.Write(b[i, j] + " ");
+            //    }
+            //    Console.WriteLine();
+            //}
             if (n != p)
                 {
                     Console.WriteLine("Matrix multiplication not possible");
@@ -429,15 +458,15 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                             }
                         }
                     }
-                Console.WriteLine("The product of the two matrices is :");
-                for (i = 0; i < m; i++)
-                {
-                    for (j = 0; j < q; j++)
-                    {
-                        Console.Write(c[i, j] + "\t");
-                    }
-                    Console.WriteLine();
-                }
+                //Console.WriteLine("The product of the two matrices is :");
+                //for (i = 0; i < m; i++)
+                //{
+                //    for (j = 0; j < q; j++)
+                //    {
+                //        Console.Write(c[i, j] + "\t");
+                //    }
+                //    Console.WriteLine();
+                //}
                 return (c);
                 }          
         }
@@ -445,31 +474,31 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         {
             int i, j;
             double[,] arr3 = new double[m, q];
-            Console.Write("\nFirst matrix is:\n");
-            for (i = 0; i < m; i++)
-            {
-                Console.Write("\n");
-                for (j = 0; j < q; j++)
-                    Console.Write("{0}\t", arr1[i, j]);
-            }
-            Console.Write("\nSecond matrix is:\n");
-            for (i = 0; i < m; i++)
-            {
-                Console.Write("\n");
-                for (j = 0; j < q; j++)
-                    Console.Write("{0}\t", arr2[i, j]);
-            }
+            //Console.Write("\nFirst matrix is:\n");
+            //for (i = 0; i < m; i++)
+            //{
+            //    Console.Write("\n");
+            //    for (j = 0; j < q; j++)
+            //        Console.Write("{0}\t", arr1[i, j]);
+            //}
+            //Console.Write("\nSecond matrix is:\n");
+            //for (i = 0; i < m; i++)
+            //{
+            //    Console.Write("\n");
+            //    for (j = 0; j < q; j++)
+            //        Console.Write("{0}\t", arr2[i, j]);
+            //}
             for (i = 0; i < m; i++)
                 for (j = 0; j < q; j++)
                     arr3[i, j] = arr1[i, j] + arr2[i, j];
-            Console.Write("\nAdding two matrices: \n");
-            for (i = 0; i < m; i++)
-            {
-                Console.Write("\n");
-                for (j = 0; j < q; j++)
-                    Console.Write("{0}\t", arr3[i, j]);
-            }
-            Console.Write("\n\n");
+            //Console.Write("\nAdding two matrices: \n");
+            //for (i = 0; i < m; i++)
+            //{
+            //    Console.Write("\n");
+            //    for (j = 0; j < q; j++)
+            //        Console.Write("{0}\t", arr3[i, j]);
+            //}
+            //Console.Write("\n\n");
             return (arr3);
         }
         double[,] MS(double[,] arr1, int m, int n, double[,] arr2, int p, int q)
