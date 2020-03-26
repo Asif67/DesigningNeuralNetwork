@@ -13,25 +13,14 @@ namespace DesigningNeuralNetwork.SupervisedLearning
     class SupervisedLearningController
     {
         //variables needed for 1 Sample, 4 Inputs, 2 Hidden Layers(3 Hidden Neurons each), 2 Outputs
-        //static int numberOfInputNeurons = 4;
-        //static int columnMatrixDef = 1;
-        //static int HL1NumberofNeurons = 3;
-        //static int HL2NumberofNeurons = 3;
-        //static int numberOfOutputNeurons = 2;
-
+        
         static int numberOfInputNeurons = 784;
         static int columnMatrixDef = 1;
         static int HL1NumberofNeurons = 16;
         static int HL2NumberofNeurons = 16;
         static int numberOfOutputNeurons = 10;
 
-        //static int numberOfInputNeurons = 1;
-        //static int columnMatrixDef = 1;
-        //static int HL1NumberofNeurons = 1;
-        //static int HL2NumberofNeurons = 1;
-        //static int numberOfOutputNeurons = 1;
-
-
+        
         public double[,] inputToHiddenLayer1WeightMatrix = new double[HL1NumberofNeurons, numberOfInputNeurons];//3 rows 4 coloums
         public double[,] hiddenLayer1ToHiddenLayer2WeightMatrix = new double[HL2NumberofNeurons, HL1NumberofNeurons];//3 rows 3 coloums
         public double[,] hiddenLayer2ToOutputWeightMatrix = new double[HL2NumberofNeurons, numberOfOutputNeurons];//3 rows 2 coloums
@@ -194,24 +183,14 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         {
 
             Initialize();
+            int fCount = Directory.GetFiles("Inputs", "*", SearchOption.TopDirectoryOnly).Length;
             Console.Write("Enter Number of Training Samples = ");
-            numberOfTrainingSamples = Convert.ToInt32(Console.ReadLine());
+            //numberOfTrainingSamples = Convert.ToInt32(Console.ReadLine());
+            numberOfTrainingSamples = fCount;
             Console.WriteLine(numberOfTrainingSamples);
             for (int j = 0; j < numberOfTrainingSamples; j++)
             {
                 Console.WriteLine("Sample Number = " + j);
-                //for (int i = 0; i < numberOfInputNeurons; i++)
-                //{
-                //    Console.Write("Enter Input Activation(" + i + ",0) = ");
-                //    inputActivation[i, 0] = Convert.ToDouble(Console.ReadLine());
-                //    //inputActivation[i, 0] = 0.00;
-                //}
-                //for (int i = 0; i < numberOfOutputNeurons; i++)
-                //{
-                //    Console.WriteLine("Enter Desired Output(" + i + ",0) = ");
-                //    desiredOutput[i, 0] = Convert.ToDouble(Console.ReadLine());
-                //    //desiredOutput[0, 0] = 1.00;
-                //}
                 InputIntializeFormFile(j);
                 DesiredOutputIntializeFormFile(j);
                 ActivationPrint();
@@ -223,6 +202,8 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 WeightUpdate();
                 Console.WriteLine("Total Cost Over All(" + j + ") Training Samples = " + totalCostOverAllTrainingSamples);
                 Console.WriteLine("Average Cost Over All(" + j + ") Training Samples = " + totalCostOverAllTrainingSamples / numberOfTrainingSamples);
+                WeightUpdateFileStore(j);
+                BiasUpdateFileStore(j);
             }
             Console.ReadKey();
 
@@ -458,7 +439,8 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 //cost[i, 0] = Math.Pow((cost[i, 0]), 2);
                 cost[i, 0] = hiddenLayer2ToOutputWeightMatrix[0,i] * FirstOrderDerivationOfSigmoidActivationFunction(z3[i, 0]) * 2 * cost[i, 0];
             }
-            deltaWeightMatrix =  MD(cost, numberOfOutputNeurons, columnMatrixDef, TM(z3, numberOfOutputNeurons, columnMatrixDef), columnMatrixDef, numberOfOutputNeurons);
+            deltaWeightMatrix = cost;
+            //deltaWeightMatrix =  MD(cost, numberOfOutputNeurons, columnMatrixDef, TM(z3, numberOfOutputNeurons, columnMatrixDef), columnMatrixDef, numberOfOutputNeurons);
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
                 totalDeltaWeight += deltaWeightMatrix[i, 0];
@@ -511,7 +493,8 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         }
         double deltaBiasCalculation()
         {
-            deltaBiasMatrix = MD(cost, numberOfOutputNeurons, columnMatrixDef, outputBias, numberOfOutputNeurons, columnMatrixDef);
+            deltaBiasMatrix = cost;
+            //deltaBiasMatrix = MD(cost, numberOfOutputNeurons, columnMatrixDef, outputBias, numberOfOutputNeurons, columnMatrixDef);
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
                 totalDeltaBias += deltaBiasMatrix[i, 0];
@@ -544,6 +527,105 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 outputBias[i, 0] += deltaBiasCalculation();
                 //outputBias[i, 0] = 0.003;
                 Console.WriteLine("OB(" + 0 + "," + i + ") = " + outputBias[i, 0]);
+            }
+            Console.WriteLine("\n");
+            //Initialize bias Matrix
+        }
+        void WeightUpdateFileStore(int sampleNumber)
+        {
+            String path = "Weights/InputToHiddenLayer1/Weight" + sampleNumber + ".csv";
+            Console.WriteLine("Input to Hidden Layer 1 Weight Matrix\n\n");
+            File.WriteAllText(path, Convert.ToString(""));
+            //Initialize Weight Matrix
+            for (int i = 0; i < HL1NumberofNeurons; i++)
+            {
+                for (int j = 0; j < numberOfInputNeurons; j++)
+                {
+                    Random X1 = new Random();
+                    inputToHiddenLayer1WeightMatrix[i, j] += deltaWeightCalculation();
+                    File.AppendAllText(path,Convert.ToString(inputToHiddenLayer1WeightMatrix[i,j]+","));
+                    //inputToHiddenLayer1WeightMatrix[i, j] = 0.01;
+                    //Console.WriteLine("IH1WM(" + i + "," + j + ") = " + inputToHiddenLayer1WeightMatrix[i, j]);
+                    //Console.Write("IH1WM(" + i + "," + j + ") = " + "{0}\t", inputToHiddenLayer1WeightMatrix[i, j]);
+                    Console.WriteLine("IH1WM(" + i + "," + j + ") = File Write Ok");
+                }
+                File.AppendAllText(path, Convert.ToString("\n"));
+                Console.WriteLine("\n");
+            }
+            path = "Weights/HiddenLayer1ToHiddenLayer2/Weight" + sampleNumber + ".csv";
+            Console.WriteLine("Hidden Layer 1 to Hidden Layer 2 Weight Matrix\n\n");
+            File.WriteAllText(path, Convert.ToString(""));
+            for (int i = 0; i < HL2NumberofNeurons; i++)
+            {
+                for (int j = 0; j < HL1NumberofNeurons; j++)
+                {
+                    Random X2 = new Random();
+                    hiddenLayer1ToHiddenLayer2WeightMatrix[i, j] += deltaWeightCalculation();
+                    File.AppendAllText(path,Convert.ToString(hiddenLayer1ToHiddenLayer2WeightMatrix[i,j] + ","));
+                    //hiddenLayer1ToHiddenLayer2WeightMatrix[i, j] = 0.02;
+                    //Console.WriteLine("H1H2WM(" + i + "," + j + ") = " + hiddenLayer1ToHiddenLayer2WeightMatrix[i, j]);
+                    //Console.Write("H1H2WM(" + i + "," + j + ") = " + "{0}\t", hiddenLayer1ToHiddenLayer2WeightMatrix[i, j]);
+                    Console.WriteLine("H1H2WM(" + i + "," + j + ") = File Write OK");
+                }
+                Console.WriteLine("\n");
+                File.AppendAllText(path, Convert.ToString("\n"));
+            }
+            path = "Weights/HiddenLayer2ToOutput/Weight" + sampleNumber + ".csv";
+            Console.WriteLine("Hidden Layer 2 to Output Weight Matrix\n\n");
+            File.WriteAllText(path, Convert.ToString(""));
+            for (int i = 0; i < HL2NumberofNeurons; i++)
+            {
+                for (int j = 0; j < numberOfOutputNeurons; j++)
+                {
+                    Random X3 = new Random();
+                    hiddenLayer2ToOutputWeightMatrix[i, j] += deltaWeightCalculation();
+                    File.AppendAllText(path, Convert.ToString(hiddenLayer2ToOutputWeightMatrix[i,j] + ","));
+                    //hiddenLayer2ToOutputWeightMatrix[i, j] = 0.03;
+                    //Console.WriteLine("H2OWM(" + i + "," + j + ") = " + hiddenLayer2ToOutputWeightMatrix[i, j]);
+                    //Console.Write("H2OWM(" + i + "," + j + ") = " + "{0}\t", hiddenLayer2ToOutputWeightMatrix[i, j]);
+                    Console.WriteLine("H2OWM(" + i + "," + j + ") = File Write Ok");
+                }
+                Console.WriteLine("\n");
+                File.AppendAllText(path, Convert.ToString("\n"));
+            }
+        }
+        void BiasUpdateFileStore(int sampleNumber)
+        {
+            String path = "Biases/HiddenLayer1/Bias" + sampleNumber + ".csv";
+            //Initialize bias Matrix
+            File.WriteAllText(path, Convert.ToString(""));
+            for (int i = 0; i < HL1NumberofNeurons; i++)
+            {
+                Random X1 = new Random();
+                hiddenLayer1Bias[i, 0] += deltaBiasCalculation();
+                File.AppendAllText(path, Convert.ToString(hiddenLayer1Bias[i, 0] + "\n"));
+                //hiddenLayer1Bias[i, 0] = 0.001;
+                //Console.WriteLine("H1B(" + 0 + "," + i + ") = " + hiddenLayer1Bias[i, 0]);
+                Console.WriteLine("H1B(" + 0 + "," + i + ") = File Write Ok");
+            }
+            Console.WriteLine("\n");
+            path = "Biases/HiddenLayer2/Bias" + sampleNumber + ".csv";
+            File.WriteAllText(path, Convert.ToString(""));
+            for (int i = 0; i < HL2NumberofNeurons; i++)
+            {
+                Random X2 = new Random();
+                hiddenLayer2Bias[i, 0] += deltaBiasCalculation();
+                File.AppendAllText(path, Convert.ToString(hiddenLayer2Bias[i, 0] + "\n"));
+                //hiddenLayer2Bias[i, 0] = 0.002;
+                //Console.WriteLine("H2B(" + 0 + "," + i + ") = " + hiddenLayer2Bias[i, 0]);
+                Console.WriteLine("H2B(" + 0 + "," + i + ") = File Write OK");
+            }
+            Console.WriteLine("\n");
+            path = "Biases/Output/Bias" + sampleNumber + ".csv";
+            File.WriteAllText(path, Convert.ToString(""));
+            for (int i = 0; i < numberOfOutputNeurons; i++)
+            {
+                Random X3 = new Random();
+                outputBias[i, 0] += deltaBiasCalculation();
+                File.AppendAllText(path, Convert.ToString(outputBias[i, 0] + "\n"));
+                //outputBias[i, 0] = 0.003;
+                //Console.WriteLine("OB(" + 0 + "," + i + ") = " + outputBias[i, 0]);
+                Console.WriteLine("OB(" + 0 + "," + i + ") = File Write Ok");
             }
             Console.WriteLine("\n");
             //Initialize bias Matrix
