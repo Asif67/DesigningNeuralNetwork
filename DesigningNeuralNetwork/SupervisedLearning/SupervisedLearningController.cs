@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DesigningNeuralNetwork.NonLinearity;
 using DesigningNeuralNetwork.SupervisedLearning.OneInput;
 using DesigningNeuralNetwork.SupervisedLearning.MultipleInput;
 using System.Windows.Media;
@@ -52,6 +53,9 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         public double totalCostOverAllTrainingSamples;
 
         public int numberOfTrainingSamples;
+
+        ActivationFunctions activationFunctions = new ActivationFunctions();
+        FirstOrderDerivatives firstOrderDerivatives = new FirstOrderDerivatives();
         //variables needed for 1 Sample, 4 Inputs, 2 Hidden Layers(3 Hidden Neurons each), 2 Outputs
         public void SingleInputSingleHiddenLayerSingleNeuronSingleOutput()
         {
@@ -72,7 +76,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 Console.WriteLine("Error[" + i + "]= " + O.error + " IH= " + N.weight_inputToHidden + " HO = " + N.weight_hiddenToOutput + " Target = " + O.target);
                 N.Weight_Update(O.error);
             }
-            Console.ReadKey();
+            //Console.ReadKey();
         }
         public void SingleInputSingleHiddenLayerSingleNeuronMultipleOutput()
         {
@@ -117,7 +121,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                     N.Weight_Update_MultipleOutput(O[l].error,numberOfOutputs, total_weight_hiddenToOutput);
                 }
             }
-            Console.ReadKey();
+            //Console.ReadKey();
         }
         public void SingleInputSingleHiddenLayerMultipleNeuronSingleOutput()
         {
@@ -177,15 +181,13 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                     N[j].Weight_Update(O.error, total_weight_inputToHidden, total_weight_hiddenToOutput);
                 }
             }
-            Console.ReadKey();
+            //Console.ReadKey();
         }
         public void MultipleInputMultipleHiddenLayerMultipleNeuronMultipleOutput()
         {
-
             Initialize();
             int fCount = Directory.GetFiles("Inputs", "*", SearchOption.TopDirectoryOnly).Length;
             Console.Write("Enter Number of Training Samples = ");
-            //numberOfTrainingSamples = Convert.ToInt32(Console.ReadLine());
             numberOfTrainingSamples = fCount;
             Console.WriteLine(numberOfTrainingSamples);
             for (int j = 0; j < numberOfTrainingSamples; j++)
@@ -201,11 +203,13 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 BiasUpdate();
                 WeightUpdate();
                 Console.WriteLine("Total Cost Over All(" + j + ") Training Samples = " + totalCostOverAllTrainingSamples);
+                File.AppendAllText("TotalCosts/TotalCost" + j + ".csv",Convert.ToString(totalCostOverAllTrainingSamples));
                 Console.WriteLine("Average Cost Over All(" + j + ") Training Samples = " + totalCostOverAllTrainingSamples / numberOfTrainingSamples);
+                File.AppendAllText("AverageCosts/AverageCost" + j + ".csv", Convert.ToString(totalCostOverAllTrainingSamples / numberOfTrainingSamples));
                 WeightUpdateFileStore(j);
                 BiasUpdateFileStore(j);
             }
-            Console.ReadKey();
+            //Console.ReadKey();
 
         }
         void Initialize()
@@ -227,11 +231,11 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             Console.WriteLine("\nAfter SigmoidActivation Function application:");
             for (int i = 0; i < HL1NumberofNeurons; i++)
             {
-                z1[i, 0] = SigmoidActivationFunction(z1[i, 0]);
+                z1[i, 0] = activationFunctions.Sigmoid(z1[i, 0]);
                 Console.WriteLine(z1[i, 0]);
             }
             hiddenLayer1Activation = z1;
-            Console.ReadKey();
+            //Console.ReadKey();
         }
         void HiddenLayer2()
         {
@@ -241,11 +245,11 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             Console.WriteLine("\nAfter SigmoidActivation Function application:");
             for (int i = 0; i < HL2NumberofNeurons; i++)
             {
-                z2[i, 0] = SigmoidActivationFunction(z2[i, 0]);
+                z2[i, 0] = activationFunctions.Sigmoid(z2[i, 0]);
                 Console.WriteLine(z2[i, 0]);
             }
             hiddenLayer2Activation = z2;
-            Console.ReadKey();
+            //Console.ReadKey();
         }
         void Output()
         {
@@ -256,22 +260,11 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             Console.WriteLine("\nAfter SigmoidActivation Function application:");
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
-                z3[i, 0] = SigmoidActivationFunction(z3[i, 0]);
+                z3[i, 0] = activationFunctions.Sigmoid(z3[i, 0]);
                 Console.WriteLine(z3[i, 0]);
             }
             outputActivation = z3;
-            Console.ReadKey();
-        }
-        double SigmoidActivationFunction(double x)
-        {
-            double sig = 1 / (1 + Math.Pow(Math.E, -x));
-            return sig;
-        }
-        double FirstOrderDerivationOfSigmoidActivationFunction(double x)
-        {
-            double output;
-            output = x * (1 - x);
-            return output;
+            //Console.ReadKey();
         }
         void WeightMatrixInitialize()
         {
@@ -381,7 +374,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 //desiredOutput[i, 0] = 1;
                 Console.WriteLine(desiredOutput[i, 0]);
             }
-            Console.ReadKey();
+            //Console.ReadKey();
         }
         double CostCalculation()
         {
@@ -421,7 +414,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
                 //cost[i, 0] = Math.Pow((cost[i, 0]), 2);
-                cost[i, 0] = FirstOrderDerivationOfSigmoidActivationFunction(z3[i, 0]) * 2 * cost[i, 0];
+                cost[i, 0] = firstOrderDerivatives.SigmoidActivationFunction(z3[i, 0]) * 2 * cost[i, 0];
                 totalCostOverAllOutputNeurons += cost[i, 0];
                 Console.WriteLine(cost[i, 0]);
             }
@@ -430,14 +423,15 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             Console.WriteLine("Average Cost of " + numberOfTrainingSamples + " Training Samples:");
             Console.WriteLine(totalCostOverAllOutputNeurons / numberOfInputNeurons);
             return (totalCostOverAllOutputNeurons);
-            Console.ReadKey();
+            //Console.ReadKey();
         }
         double deltaWeightCalculation()
         {
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
                 //cost[i, 0] = Math.Pow((cost[i, 0]), 2);
-                cost[i, 0] = hiddenLayer2ToOutputWeightMatrix[0,i] * FirstOrderDerivationOfSigmoidActivationFunction(z3[i, 0]) * 2 * cost[i, 0];
+                //cost[i, 0] = hiddenLayer2ToOutputWeightMatrix[0,i] * firstOrderDerivatives.SigmoidActivationFunction(z3[i, 0]) * 2 * cost[i, 0];//Gradient Desent
+                cost[i, 0] = hiddenLayer2ToOutputWeightMatrix[0, i] * firstOrderDerivatives.SigmoidActivationFunction(z3[i, 0]) * 2 * cost[i, 0] * (-1);//Negative Gradient Desent
             }
             deltaWeightMatrix = cost;
             //deltaWeightMatrix =  MD(cost, numberOfOutputNeurons, columnMatrixDef, TM(z3, numberOfOutputNeurons, columnMatrixDef), columnMatrixDef, numberOfOutputNeurons);
@@ -547,7 +541,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                     //inputToHiddenLayer1WeightMatrix[i, j] = 0.01;
                     //Console.WriteLine("IH1WM(" + i + "," + j + ") = " + inputToHiddenLayer1WeightMatrix[i, j]);
                     //Console.Write("IH1WM(" + i + "," + j + ") = " + "{0}\t", inputToHiddenLayer1WeightMatrix[i, j]);
-                    Console.WriteLine("IH1WM(" + i + "," + j + ") = File Write Ok");
+                    Console.WriteLine("IH1WM(" + i + "," + j + ") = File Write Ok" + "Training Sample No = " + sampleNumber);
                 }
                 File.AppendAllText(path, Convert.ToString("\n"));
                 Console.WriteLine("\n");
@@ -565,7 +559,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                     //hiddenLayer1ToHiddenLayer2WeightMatrix[i, j] = 0.02;
                     //Console.WriteLine("H1H2WM(" + i + "," + j + ") = " + hiddenLayer1ToHiddenLayer2WeightMatrix[i, j]);
                     //Console.Write("H1H2WM(" + i + "," + j + ") = " + "{0}\t", hiddenLayer1ToHiddenLayer2WeightMatrix[i, j]);
-                    Console.WriteLine("H1H2WM(" + i + "," + j + ") = File Write OK");
+                    Console.WriteLine("H1H2WM(" + i + "," + j + ") = File Write OK" + "Training Sample No = " + sampleNumber);
                 }
                 Console.WriteLine("\n");
                 File.AppendAllText(path, Convert.ToString("\n"));
@@ -583,7 +577,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                     //hiddenLayer2ToOutputWeightMatrix[i, j] = 0.03;
                     //Console.WriteLine("H2OWM(" + i + "," + j + ") = " + hiddenLayer2ToOutputWeightMatrix[i, j]);
                     //Console.Write("H2OWM(" + i + "," + j + ") = " + "{0}\t", hiddenLayer2ToOutputWeightMatrix[i, j]);
-                    Console.WriteLine("H2OWM(" + i + "," + j + ") = File Write Ok");
+                    Console.WriteLine("H2OWM(" + i + "," + j + ") = File Write Ok" + "Training Sample No = " + sampleNumber);
                 }
                 Console.WriteLine("\n");
                 File.AppendAllText(path, Convert.ToString("\n"));
@@ -601,7 +595,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 File.AppendAllText(path, Convert.ToString(hiddenLayer1Bias[i, 0] + "\n"));
                 //hiddenLayer1Bias[i, 0] = 0.001;
                 //Console.WriteLine("H1B(" + 0 + "," + i + ") = " + hiddenLayer1Bias[i, 0]);
-                Console.WriteLine("H1B(" + 0 + "," + i + ") = File Write Ok");
+                Console.WriteLine("H1B(" + 0 + "," + i + ") = File Write Ok" + "Training Sample No = " + sampleNumber);
             }
             Console.WriteLine("\n");
             path = "Biases/HiddenLayer2/Bias" + sampleNumber + ".csv";
@@ -613,7 +607,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 File.AppendAllText(path, Convert.ToString(hiddenLayer2Bias[i, 0] + "\n"));
                 //hiddenLayer2Bias[i, 0] = 0.002;
                 //Console.WriteLine("H2B(" + 0 + "," + i + ") = " + hiddenLayer2Bias[i, 0]);
-                Console.WriteLine("H2B(" + 0 + "," + i + ") = File Write OK");
+                Console.WriteLine("H2B(" + 0 + "," + i + ") = File Write OK" + "Training Sample No = " + sampleNumber);
             }
             Console.WriteLine("\n");
             path = "Biases/Output/Bias" + sampleNumber + ".csv";
@@ -625,7 +619,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 File.AppendAllText(path, Convert.ToString(outputBias[i, 0] + "\n"));
                 //outputBias[i, 0] = 0.003;
                 //Console.WriteLine("OB(" + 0 + "," + i + ") = " + outputBias[i, 0]);
-                Console.WriteLine("OB(" + 0 + "," + i + ") = File Write Ok");
+                Console.WriteLine("OB(" + 0 + "," + i + ") = File Write Ok" + "Training Sample No = " + sampleNumber);
             }
             Console.WriteLine("\n");
             //Initialize bias Matrix
@@ -849,7 +843,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             for (int i = 1; i < numberOfInputNeurons; i++)
             {
                 inputActivation[i, 0] = Convert.ToDouble(lines[i]);
-                Console.WriteLine("File Read OK:" + lines[i]);
+                Console.WriteLine("File Read OK:" + lines[i] + "Training Sample No = " + sampleNumber);
                 Console.WriteLine("Input Assignment OK:" + inputActivation[i, 0]);
             }
         }
@@ -866,7 +860,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             {
                 desiredOutput[i, 0] = Convert.ToDouble(lines[i]);
                 Console.WriteLine("File Read OK:" + lines[i]);
-                Console.WriteLine("Desired Output Assignment OK:" + desiredOutput[i, 0]);
+                Console.WriteLine("Desired Output Assignment OK:" + desiredOutput[i, 0] + "Training Sample No = " + sampleNumber);
             }
         }
     }
