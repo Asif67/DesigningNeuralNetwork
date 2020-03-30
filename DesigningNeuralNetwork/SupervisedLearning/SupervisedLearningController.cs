@@ -22,6 +22,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         static int numberOfOutputNeurons = 10;
         public double weightInitialValue = 0.001;
         public double biasInitialValue = 0.0001;
+        public double learningRate = 0.01;
 
         public double[,] inputToHiddenLayer1WeightMatrix = new double[HL1NumberofNeurons, numberOfInputNeurons];//3 rows 4 coloums
         public double[,] hiddenLayer1ToHiddenLayer2WeightMatrix = new double[HL2NumberofNeurons, HL1NumberofNeurons];//3 rows 3 coloums
@@ -54,6 +55,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         public double totalCostOverAllTrainingSamples=0;
 
         public int numberOfTrainingSamples=0;
+        public int sampleIterator = 0;
 
         ActivationFunctions activationFunctions = new ActivationFunctions();
         FirstOrderDerivatives firstOrderDerivatives = new FirstOrderDerivatives();
@@ -91,6 +93,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 fileOperations.WeightUpdateFileStore(path, HL2NumberofNeurons, HL1NumberofNeurons,j,hiddenLayer1ToHiddenLayer2WeightMatrix);
                 path = "Weights/HiddenLayer2ToOutput/Weight" + j + ".csv";
                 fileOperations.WeightUpdateFileStore(path, HL2NumberofNeurons, numberOfOutputNeurons,j,hiddenLayer2ToOutputWeightMatrix);
+                sampleIterator++;
             }
             Console.ReadKey();
 
@@ -254,12 +257,6 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         }
         double CostCalculation(int sampleNumber)
         {
-            //Console.WriteLine("\nCost(desiredoutput - predicted output):");
-            //cost = MS(z3, numberOfOutputNeurons, columnMatrixDef, desiredOutput, numberOfOutputNeurons, columnMatrixDef);
-            //for (int i = 0; i < numberOfOutputNeurons; i++)
-            //{
-            //    Console.WriteLine(cost[i, 0]);
-            //}
             Console.WriteLine("\nCost(desiredoutput - predicted output)^2:");
             //for (int i = 0; i < numberOfOutputNeurons; i++)
             //{
@@ -290,8 +287,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             File.WriteAllText("CostOverAllOutputNeuron/CostOverAllOutputNeuronsTrainingSample" + sampleNumber + ".csv", "");
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
-                //cost[i, 0] = Math.Pow((cost[i, 0]), 2);
-                cost[i, 0] = firstOrderDerivatives.SigmoidActivationFunction(z3[i, 0]) * 2 * cost[i, 0];
+                //cost[i, 0] = (-2) * numberOfNeuronsInPreviousLayer * cost[i, 0];
                 File.AppendAllText("CostOverAllOutputNeuron/CostOverAllOutputNeuronsTrainingSample" + sampleNumber + ".csv",Convert.ToString(cost[i,0])+",");
                 totalCostOverAllOutputNeurons += cost[i, 0];
                 Console.WriteLine(cost[i, 0]);
@@ -307,15 +303,12 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         {
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
-                //cost[i, 0] = Math.Pow((cost[i, 0]), 2);
-                cost[i, 0] = hiddenLayer2ToOutputWeightMatrix[0,i] * firstOrderDerivatives.SigmoidActivationFunction(z3[i, 0]) * 2 * cost[i, 0];//Gradient Desent
-                //cost[i, 0] = hiddenLayer2ToOutputWeightMatrix[0, i] * firstOrderDerivatives.SigmoidActivationFunction(z3[i, 0]) * 2 * cost[i, 0] * (-1);//Negative Gradient Desent
+                deltaWeightMatrix[0, i] = (-2) * HL2NumberofNeurons * cost[i, 0] * learningRate;//Gradient Desent
             }
-            deltaWeightMatrix = cost;
             //deltaWeightMatrix =  MD(cost, numberOfOutputNeurons, columnMatrixDef, TM(z3, numberOfOutputNeurons, columnMatrixDef), columnMatrixDef, numberOfOutputNeurons);
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
-                totalDeltaWeight += deltaWeightMatrix[i, 0];
+                totalDeltaWeight += deltaWeightMatrix[0, i];
                 //Console.WriteLine(cost[i, 0]);
             }
             return (totalDeltaWeight);
@@ -329,7 +322,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 for (int j = 0; j < numberOfInputNeurons; j++)
                 {
                     Random X1 = new Random();
-                    inputToHiddenLayer1WeightMatrix[i, j] += deltaWeightCalculation();
+                    inputToHiddenLayer1WeightMatrix[i, j] -= deltaWeightCalculation();
                     //inputToHiddenLayer1WeightMatrix[i, j] = 0.01;
                     //Console.WriteLine("IH1WM(" + i + "," + j + ") = " + inputToHiddenLayer1WeightMatrix[i, j]);
                     Console.Write("IH1WM(" + i + "," + j + ") = " + "{0}\t", inputToHiddenLayer1WeightMatrix[i, j]);
@@ -342,7 +335,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 for (int j = 0; j < HL1NumberofNeurons; j++)
                 {
                     Random X2 = new Random();
-                    hiddenLayer1ToHiddenLayer2WeightMatrix[i, j] += deltaWeightCalculation();
+                    hiddenLayer1ToHiddenLayer2WeightMatrix[i, j] -= deltaWeightCalculation();
                     //hiddenLayer1ToHiddenLayer2WeightMatrix[i, j] = 0.02;
                     //Console.WriteLine("H1H2WM(" + i + "," + j + ") = " + hiddenLayer1ToHiddenLayer2WeightMatrix[i, j]);
                     Console.Write("H1H2WM(" + i + "," + j + ") = " + "{0}\t", hiddenLayer1ToHiddenLayer2WeightMatrix[i, j]);
@@ -355,7 +348,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 for (int j = 0; j < numberOfOutputNeurons; j++)
                 {
                     Random X3 = new Random();
-                    hiddenLayer2ToOutputWeightMatrix[i, j] += deltaWeightCalculation();
+                    hiddenLayer2ToOutputWeightMatrix[i, j] -= deltaWeightCalculation();
                     //hiddenLayer2ToOutputWeightMatrix[i, j] = 0.03;
                     //Console.WriteLine("H2OWM(" + i + "," + j + ") = " + hiddenLayer2ToOutputWeightMatrix[i, j]);
                     Console.Write("H2OWM(" + i + "," + j + ") = " + "{0}\t", hiddenLayer2ToOutputWeightMatrix[i, j]);
@@ -365,10 +358,16 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         }
         double deltaBiasCalculation()
         {
-            deltaBiasMatrix = cost;
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
-                totalDeltaBias += deltaBiasMatrix[i, 0];
+                for(int j = 0; j < HL2NumberofNeurons; j++)
+                {
+                    deltaBiasMatrix[0, i] = (-2) * hiddenLayer2Bias[j, 0] * cost[i, 0] * learningRate;//Gradient Desent
+                }
+            }
+            for (int i = 0; i < numberOfOutputNeurons; i++)
+            {
+                totalDeltaBias += deltaBiasMatrix[0, i];
                 //Console.WriteLine(cost[i, 0]);
             }
             return (totalDeltaBias);
@@ -379,7 +378,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             for (int i = 0; i < HL1NumberofNeurons; i++)
             {
                 Random X1 = new Random();
-                hiddenLayer1Bias[i, 0] += deltaBiasCalculation();
+                hiddenLayer1Bias[i, 0] -= deltaBiasCalculation();
                 //hiddenLayer1Bias[i, 0] = 0.001;
                 Console.WriteLine("H1B(" + 0 + "," + i + ") = " + hiddenLayer1Bias[i, 0]);
             }
@@ -387,7 +386,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             for (int i = 0; i < HL2NumberofNeurons; i++)
             {
                 Random X2 = new Random();
-                hiddenLayer2Bias[i, 0] += deltaBiasCalculation();
+                hiddenLayer2Bias[i, 0] -= deltaBiasCalculation();
                 //hiddenLayer2Bias[i, 0] = 0.002;
                 Console.WriteLine("H2B(" + 0 + "," + i + ") = " + hiddenLayer2Bias[i, 0]);
             }
@@ -395,7 +394,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
             for (int i = 0; i < numberOfOutputNeurons; i++)
             {
                 Random X3 = new Random();
-                outputBias[i, 0] += deltaBiasCalculation();
+                outputBias[i, 0] -= deltaBiasCalculation();
                 //outputBias[i, 0] = 0.003;
                 Console.WriteLine("OB(" + 0 + "," + i + ") = " + outputBias[i, 0]);
             }
