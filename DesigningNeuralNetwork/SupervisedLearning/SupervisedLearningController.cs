@@ -21,7 +21,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         static int HL2NumberofNeurons = 16;
         static int numberOfOutputNeurons = 10;
         public double weightInitialValue = 0.001;
-        public double biasInitialValue = 0.0001;
+        public double biasInitialValue = 0;
         public double learningRate = 0.01;
 
         public double[,] inputToHiddenLayer1WeightMatrix = new double[HL1NumberofNeurons, numberOfInputNeurons];//3 rows 4 coloums
@@ -75,10 +75,10 @@ namespace DesigningNeuralNetwork.SupervisedLearning
                 Console.WriteLine("Sample Number = " + j);
                 fileOperations.InputIntializeFormFile(j,numberOfInputNeurons,inputActivation);
                 fileOperations.DesiredOutputIntializeFormFile(j,numberOfOutputNeurons,desiredOutput);
-                ActivationPrint();
-                DesiredOutputPrint();
                 HiddenLayers();
                 Output(j);
+                ActivationPrint();
+                DesiredOutputPrint();
                 totalCostOverAllTrainingSamples += CostCalculation(j);
                 BiasUpdate();
                 WeightUpdate();
