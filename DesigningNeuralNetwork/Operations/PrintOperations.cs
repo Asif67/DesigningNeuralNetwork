@@ -7,8 +7,32 @@ using System.IO;
 
 namespace DesigningNeuralNetwork.Operations
 {
-    class FileOperations
+    class PrintOperations
     {
+        public void PrintMatrix(string header, int row, int column, double[,] matrix)
+        {
+            Console.WriteLine(header);
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < column; j++)
+                {
+                    Console.Write(matrix[i, j] + " ");
+                }
+                Console.WriteLine("");
+            }
+        }
+        public void PrintMatrixFile(String path, int row, int column, double[,] matrix)
+        {
+            File.WriteAllText(path, "");
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < column; j++)
+                {
+                    File.AppendAllText(path, matrix[i, j] + ",");
+                }
+                File.AppendAllText(path, "\n");
+            }
+        }
         public void BiasUpdateFileStore(int sampleNumber, int HL1NumberofNeurons, int HL2NumberofNeurons, int numberOfOutputNeurons, double[,] hiddenLayer1Bias, double[,] hiddenLayer2Bias, double[,] outputBias)
         {
             String path = "Biases/HiddenLayer1/Bias" + sampleNumber + ".csv";
