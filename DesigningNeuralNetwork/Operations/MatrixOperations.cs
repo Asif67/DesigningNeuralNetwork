@@ -91,6 +91,18 @@ namespace DesigningNeuralNetwork.Operations
             return (C);
 
         }
-        
+        public double[,] InitializeMatrix(double[,] matrix, int row, int column, double initializeValue)
+        {
+            int iterator = 0;
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < column; j++)
+                {
+                    matrix[i, j] = initializeValue;
+                    iterator++;
+                }
+            }
+            return (matrix);
+        }
     }
 }

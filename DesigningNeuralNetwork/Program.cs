@@ -16,7 +16,8 @@ namespace DesigningNeuralNetwork
             //S.SingleInputSingleHiddenLayerMultipleNeuronSingleOutput();
             //S.SingleInputSingleHiddenLayerSingleNeuronMultipleOutput();
             //S.MultipleInputMultipleHiddenLayerMultipleNeuronMultipleOutput();
-            S.MultipleInputMultipleHiddenLayerMultipleNeuronMultipleOutput();
+            //S.MultipleInputMultipleHiddenLayerMultipleNeuronMultipleOutput();
+            S.Train();
             //test t = new test();
             //t.Initialize();
             //t.HiddenLayer1();
