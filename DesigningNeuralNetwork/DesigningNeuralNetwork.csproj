@@ -45,8 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NonLinearity\ActivationFunctions.cs" />
-    <Compile Include="NonLinearity\FirstOrderDerivatives.cs" />
-    <Compile Include="Operations\FileOperations.cs" />
+    <Compile Include="Operations\PrintOperations.cs" />
     <Compile Include="Operations\MatrixOperations.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

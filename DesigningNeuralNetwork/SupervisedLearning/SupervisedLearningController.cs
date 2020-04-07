@@ -37,11 +37,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         public double[,] hiddenLayer2Bias = new double[HL2NumberofNeurons, columnMatrixDef];//3 rows 1 coloums
         public double[,] outputBias = new double[numberOfOutputNeurons, columnMatrixDef];//2 rows 1 coloums
 
-        public double[,] z1 = new double[HL1NumberofNeurons, columnMatrixDef];//3 rows 1 coloums
-        public double[,] z2 = new double[HL2NumberofNeurons, columnMatrixDef];//3 rows 1 coloums
-        public double[,] z3 = new double[numberOfOutputNeurons, columnMatrixDef];//2 rows 1 coloums
-        public double[,] z3Prime = new double[numberOfOutputNeurons, columnMatrixDef];//2 rows 1 coloums
-
+        
         public double[,] desiredOutput = new double[numberOfOutputNeurons, columnMatrixDef];//2 rows 1 coloums
         public double[,] cost = new double[numberOfOutputNeurons, columnMatrixDef];//2 rows 1 coloums
         double[,] output = new double[columnMatrixDef, numberOfOutputNeurons];
@@ -54,7 +50,7 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         double[,] errorOutput = new double[numberOfOutputNeurons, HL2NumberofNeurons];
         double[,] errorHidden1 = new double[numberOfOutputNeurons, numberOfInputNeurons];
 
-        double[,] ones = new double[numberOfOutputNeurons, 1];
+        double[,] ones = new double[numberOfOutputNeurons, columnMatrixDef];
 
         double[,] inputActivationTranspose = new double[columnMatrixDef, numberOfInputNeurons];//[row,coloumn]
         double[,] outputActivationTranspose = new double[columnMatrixDef, numberOfOutputNeurons];
@@ -77,39 +73,6 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         PrintOperations printOperations = new PrintOperations();
 
         //variables needed for 1 Sample, 4 Inputs, 2 Hidden Layers(3 Hidden Neurons each), 2 Outputs
-        //public void MultipleInputMultipleHiddenLayerMultipleNeuronMultipleOutput()
-        //{
-        //    Initialize();
-        //    int fCount = Directory.GetFiles("Inputs", "*", SearchOption.TopDirectoryOnly).Length;
-        //    Console.Write("Enter Number of Training Samples = ");
-        //    numberOfTrainingSamples = fCount;
-        //    Console.WriteLine(numberOfTrainingSamples);
-        //    for (int j = 0; j < numberOfTrainingSamples; j++)
-        //    {
-        //        Console.WriteLine("Sample Number = " + j);
-        //        printOperations.InputIntializeFormFile(j,numberOfInputNeurons,inputActivation);
-        //        printOperations.DesiredOutputIntializeFormFile(j,numberOfOutputNeurons,desiredOutput);
-        //        HiddenLayers();
-        //        Output(j);
-        //        totalCostOverAllTrainingSamples += CostCalculation(j);
-        //        BiasUpdate();
-        //        WeightUpdate();
-        //        Console.WriteLine("Total Cost Over All(" + j + ") Training Samples = " + totalCostOverAllTrainingSamples);
-        //        File.WriteAllText("TotalCosts/TotalCost" + j + ".csv",Convert.ToString(totalCostOverAllTrainingSamples));
-        //        Console.WriteLine("Average Cost Over All(" + j + ") Training Samples = " + totalCostOverAllTrainingSamples / numberOfTrainingSamples);
-        //        File.WriteAllText("AverageCosts/AverageCost" + j + ".csv", Convert.ToString(totalCostOverAllTrainingSamples / numberOfTrainingSamples));
-        //        printOperations.BiasUpdateFileStore(j,HL1NumberofNeurons,HL2NumberofNeurons,numberOfOutputNeurons,hiddenLayer1Bias,hiddenLayer2Bias,outputBias);
-        //        String path = "Weights/InputToHiddenLayer1/Weight" + j + ".csv";
-        //        printOperations.WeightUpdateFileStore(path,HL1NumberofNeurons,numberOfInputNeurons,j,inputToHiddenLayer1WeightMatrix);
-        //        path = "Weights/HiddenLayer1ToHiddenLayer2/Weight" + j + ".csv";
-        //        printOperations.WeightUpdateFileStore(path, HL2NumberofNeurons, HL1NumberofNeurons,j,hiddenLayer1ToHiddenLayer2WeightMatrix);
-        //        path = "Weights/HiddenLayer2ToOutput/Weight" + j + ".csv";
-        //        printOperations.WeightUpdateFileStore(path, HL2NumberofNeurons, numberOfOutputNeurons,j,hiddenLayer2ToOutputWeightMatrix);
-        //        sampleIterator++;
-        //    }
-        //    Console.ReadKey();
-
-        //}
         public void Train()
         {
             Initialize();
@@ -120,31 +83,31 @@ namespace DesigningNeuralNetwork.SupervisedLearning
         void Initialize()
         {
             WeightMatrixInitialize();
-            BiasInitialize();
+            //BiasInitialize();
         }
         void Calculation()
         {
-            hiddenLayer1ActivationWithoutSig = matrixOperations.MatrixMultiplication(inputToHiddenLayer1WeightMatrix, HL1NumberofNeurons, numberOfInputNeurons, inputActivation, columnMatrixDef);
-            for (int i = 0; i < HL1NumberofNeurons; i++)
-            {
-                hiddenLayer1Activation[i, 0] = activationFunctions.Sigmoid(hiddenLayer1ActivationWithoutSig[i, 0]);
-                hiddenLayer1ActivationTranspose[0, i] = hiddenLayer1Activation[i, 0];
-            }
-            hiddenLayer2ActivationWithoutSig = matrixOperations.MatrixMultiplication(hiddenLayer1ToHiddenLayer2WeightMatrix, HL2NumberofNeurons, HL1NumberofNeurons, hiddenLayer1Activation, columnMatrixDef);
-            for (int i = 0; i < HL2NumberofNeurons; i++)
-            {
-                hiddenLayer2Activation[i, 0] = activationFunctions.Sigmoid(hiddenLayer2ActivationWithoutSig[i, 0]);
-                hiddenLayer2ActivationTranspose[0, i] = hiddenLayer2Activation[i, 0];
-            }
-            output = matrixOperations.MatrixMultiplication(hiddenLayer2ToOutputWeightMatrix, numberOfOutputNeurons, HL2NumberofNeurons, hiddenLayer2Activation, columnMatrixDef);
-            for (int i = 0; i < numberOfOutputNeurons; i++)
-            {
-                outputActivation[i, 0] = activationFunctions.Sigmoid(output[i, 0]);
-                outputActivationTranspose[0, i] = outputActivation[i, 0];
-            }
-            errorOutput = matrixOperations.MatrixMultiplication(errorOutput, numberOfOutputNeurons, columnMatrixDef, outputActivationTranspose, numberOfOutputNeurons);
-            errorOutput = matrixOperations.MatrixMultiplication(errorOutput, numberOfOutputNeurons, columnMatrixDef, matrixOperations.MatrixSubstraction(ones, numberOfOutputNeurons, columnMatrixDef, output), numberOfOutputNeurons);
-            deltaHiddenLayer2ToOutputWeightMatrix = matrixOperations.MatrixMultiplication(errorOutput, numberOfOutputNeurons, columnMatrixDef, hiddenLayer1ActivationTranspose, numberOfOutputNeurons);
+            //hiddenLayer1ActivationWithoutSig = matrixOperations.MatrixMultiplication(inputToHiddenLayer1WeightMatrix, HL1NumberofNeurons, numberOfInputNeurons, inputActivation, columnMatrixDef);
+            //for (int i = 0; i < HL1NumberofNeurons; i++)
+            //{
+            //    hiddenLayer1Activation[i, 0] = activationFunctions.Sigmoid(hiddenLayer1ActivationWithoutSig[i, 0]);
+            //    hiddenLayer1ActivationTranspose[0, i] = hiddenLayer1Activation[i, 0];
+            //}
+            //hiddenLayer2ActivationWithoutSig = matrixOperations.MatrixMultiplication(hiddenLayer1ToHiddenLayer2WeightMatrix, HL2NumberofNeurons, HL1NumberofNeurons, hiddenLayer1Activation, columnMatrixDef);
+            //for (int i = 0; i < HL2NumberofNeurons; i++)
+            //{
+            //    hiddenLayer2Activation[i, 0] = activationFunctions.Sigmoid(hiddenLayer2ActivationWithoutSig[i, 0]);
+            //    hiddenLayer2ActivationTranspose[0, i] = hiddenLayer2Activation[i, 0];
+            //}
+            //output = matrixOperations.MatrixMultiplication(hiddenLayer2ToOutputWeightMatrix, numberOfOutputNeurons, HL2NumberofNeurons, hiddenLayer2Activation, columnMatrixDef);
+            //for (int i = 0; i < numberOfOutputNeurons; i++)
+            //{
+            //    outputActivation[i, 0] = activationFunctions.Sigmoid(output[i, 0]);
+            //    outputActivationTranspose[0, i] = outputActivation[i, 0];
+            //}
+            //errorOutput = matrixOperations.MatrixMultiplication(errorOutput, numberOfOutputNeurons, columnMatrixDef, outputActivationTranspose, numberOfOutputNeurons);
+            //errorOutput = matrixOperations.MatrixMultiplication(errorOutput, numberOfOutputNeurons, columnMatrixDef, matrixOperations.MatrixSubstraction(ones, numberOfOutputNeurons, columnMatrixDef, output), numberOfOutputNeurons);
+            //deltaHiddenLayer2ToOutputWeightMatrix = matrixOperations.MatrixMultiplication(errorOutput, numberOfOutputNeurons, columnMatrixDef, hiddenLayer1ActivationTranspose, numberOfOutputNeurons);
         }
         void WeightMatrixInitialize()
         {
